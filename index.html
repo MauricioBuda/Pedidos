@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <title>Pedido de Medialunas</title>
+</head>
+<body>
+
+<!-- <div class="container"> -->
+
+
+  <h2>Cuenta</h2>
+
+  <p id="userInfo" style="display:none;">
+  Sesión iniciada como: <strong id="userEmail"></strong>
+</p>
+
+
+<div id="authSection">
+  <input type="email" id="loginEmail" placeholder="Email" />
+    <div style="display:inline-flex; align-items:center; gap:6px;">
+    <input type="password" id="loginPass" placeholder="Contraseña" />
+    <button type="button" id="btnTogglePass">👁️</button>
+  </div>
+
+  <button id="btnLogin">Iniciar sesión</button>
+  <button id="btnRegister">Registrarse</button>
+  <button id="btnGoogle">Entrar con Google</button>
+  <button id="btnResetPass">¿Olvidaste tu contraseña?</button>
+  <button id="btnLogout" style="display:none;">Cerrar sesión</button>
+</div>
+
+<hr>
+
+
+
+
+
+<!-- <button id="btnAdmin" style="display:none;">
+  Ir al Panel Admin
+</button> -->
+
+
+
+
+
+<div id="seccionCliente"  style="display:none;">
+
+  <h1>Encargar Pedido</h1>
+
+  <form id="pedidoForm">
+
+    <h3>Datos del cliente</h3>
+    <input type="text" id="nombre" placeholder="Nombre completo" required />
+    <input type="tel" id="telefono" placeholder="Teléfono" required />
+    <input type="email" id="email" placeholder="Email" required />
+
+    <h3>Pedido</h3>
+    <input type="number" id="manteca" placeholder="Medialunas de manteca (cantidad)" min="0" />
+    <input type="number" id="grasa" placeholder="Medialunas de grasa (cantidad)" min="0" />
+    <input type="number" id="facturas" placeholder="Facturas surtidas (cantidad)" min="0" />
+
+    <textarea id="notas" placeholder="Notas adicionales"></textarea>
+
+    <h3>Entrega</h3>
+    <input type="date" id="fechaEntrega" required />
+    <input type="time" id="horaEntrega" required />
+
+    <button type="submit">Enviar pedido</button>
+
+  </form>
+
+
+
+
+
+
+
+
+<h2>Mis pedidos</h2>
+
+<p id="loadingPedidos" style="display:none;">
+  Cargando pedidos...
+</p>
+
+
+
+    <table border="1" id="tablaPedidos">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Estado</th>
+      <th>Productos</th>
+      <th>Notas</th>
+      <th>PDF</th>
+    </tr>
+  </thead>
+  <tbody id="pedidosBody">
+    <!-- Se llena por JS -->
+  </tbody>
+</table>
+
+
+
+
+
+</div>
+
+
+  <hr>
+
+
+
+
+
+<!-- </div> -->
+
+
+
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
