@@ -217,7 +217,7 @@ async function cargarPedidosUsuario(uid) {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    authSection.style.display = "block";
+    authSection.style.display = "flex";
     seccionCliente.style.display = "none";
     seccionAdmin.style.display = "none";
     btnLogout.style.display = "none";
