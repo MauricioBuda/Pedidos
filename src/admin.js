@@ -1,12 +1,7 @@
 // ================================
 // IMPORTS
 // ================================
-import { auth, db } from "./firebase";
-import {
-  signOut,
-  onAuthStateChanged
-} from "firebase/auth";
-
+import { db } from "./firebase";
 import {
   collection,
   getDocs,
@@ -15,78 +10,54 @@ import {
   orderBy,
   query
 } from "firebase/firestore";
-
 import jsPDF from "jspdf";
 
-
+// ================================
+// ESTADO
+// ================================
 let pedidosCache = [];
-
 let filtroClienteActivo = null;
-
-
 
 // ================================
 // DOM
 // ================================
 const tbody = document.getElementById("adminPedidosBody");
-// const btnLogout = document.getElementById("btnLogoutAdmin");
-
-// ================================
-// LOGOUT
-// ================================
-
-
-// btnLogout.addEventListener("click", async () => {
-//   await signOut(auth);
-//   window.location.href = "/";
-// });
-
-// ================================
-// VERIFICAR ROL ADMIN
-// ================================
-import { getDoc } from "firebase/firestore";
-
-// async function verificarAdmin(user) {
-//   const ref = doc(db, "usuarios", user.uid);
-//   const snap = await getDoc(ref);
-
-//   if (!snap.exists() || snap.data().rol !== "admin") {
-//     alert("Acceso denegado");
-//     window.location.href = "/";
-//   }
-// }
-
 const loadingAdmin = document.getElementById("loadingAdmin");
 
 const filtroEstado = document.getElementById("filtroEstado");
-
 const busquedaCliente = document.getElementById("busquedaCliente");
 const sugerenciasClientes = document.getElementById("sugerenciasClientes");
-
-
 
 const filtroClienteBox = document.getElementById("filtroClienteActivoBox");
 const filtroClienteTexto = document.getElementById("filtroClienteTexto");
 const btnLimpiarFiltroCliente = document.getElementById("btnLimpiarFiltroCliente");
 
-
 const contadorPedidosNumero = document.getElementById("contadorPedidosNumero");
 
+// ================================
+// EVENTOS (UNA SOLA VEZ)
+// ================================
+filtroEstado.addEventListener("change", () => {
+  cargarPedidos();
+});
 
+busquedaCliente.addEventListener("input", () => {
+  if (busquedaCliente.value === "") {
+    filtroClienteActivo = null;
+  }
+  cargarPedidos();
+});
 
 btnLimpiarFiltroCliente.addEventListener("click", () => {
   filtroClienteActivo = null;
+  busquedaCliente.value = "";
   actualizarIndicadorFiltroCliente();
   cargarPedidos();
 });
 
-
-
 // ================================
 // CARGAR PEDIDOS
 // ================================
-
-
 async function cargarPedidos() {
   tbody.innerHTML = "";
   loadingAdmin.style.display = "block";
@@ -94,16 +65,6 @@ async function cargarPedidos() {
   const estadoSeleccionado = filtroEstado.value;
   const textoBusqueda = busquedaCliente.value.toLowerCase();
   const filtroActivo = filtroClienteActivo?.toLowerCase();
-
-
-  busquedaCliente.addEventListener("input", () => {
-  if (busquedaCliente.value === "") {
-    filtroClienteActivo = null;
-    cargarPedidos();
-  }
-});
-
-
 
   const q = query(
     collection(db, "pedidos"),
@@ -119,6 +80,7 @@ async function cargarPedidos() {
         <td colspan="7">No hay pedidos</td>
       </tr>
     `;
+    actualizarContadorPedidos();
     return;
   }
 
@@ -128,49 +90,34 @@ async function cargarPedidos() {
   });
 
   let hayResultados = false;
-
-  // 👉 Sugerencias únicas
   const sugerenciasMap = new Map();
 
   pedidosCache.forEach((pedido) => {
-    const nombre = pedido.cliente.nombre?.trim();
-    const email = pedido.cliente.email?.trim();
+    const nombre = pedido.cliente?.nombre?.trim();
+    const email = pedido.cliente?.email?.trim();
 
     if (nombre) {
-      sugerenciasMap.set(`nombre:${nombre}`, {
-        tipo: "nombre",
-        valor: nombre
-      });
+      sugerenciasMap.set(`nombre:${nombre}`, { tipo: "nombre", valor: nombre });
     }
-
     if (email) {
-      sugerenciasMap.set(`email:${email}`, {
-        tipo: "email",
-        valor: email
-      });
+      sugerenciasMap.set(`email:${email}`, { tipo: "email", valor: email });
     }
 
-    // ===== FILTROS =====
-
-    if (
-      estadoSeleccionado !== "todos" &&
-      pedido.estado !== estadoSeleccionado
-    ) {
+    // ===== FILTRO POR ESTADO =====
+    if (estadoSeleccionado !== "todos" && pedido.estado !== estadoSeleccionado) {
       return;
     }
 
-if (filtroActivo) {
-  const matchNombre = nombre?.toLowerCase().includes(filtroActivo);
-  const matchEmail = email?.toLowerCase().includes(filtroActivo);
-
-  if (!matchNombre && !matchEmail) return;
-} else if (textoBusqueda) {
-  const matchNombre = nombre?.toLowerCase().includes(textoBusqueda);
-  const matchEmail = email?.toLowerCase().includes(textoBusqueda);
-
-  if (!matchNombre && !matchEmail) return;
-}
-
+    // ===== FILTRO POR CLIENTE =====
+    if (filtroActivo) {
+      const matchNombre = nombre?.toLowerCase().includes(filtroActivo);
+      const matchEmail = email?.toLowerCase().includes(filtroActivo);
+      if (!matchNombre && !matchEmail) return;
+    } else if (textoBusqueda) {
+      const matchNombre = nombre?.toLowerCase().includes(textoBusqueda);
+      const matchEmail = email?.toLowerCase().includes(textoBusqueda);
+      if (!matchNombre && !matchEmail) return;
+    }
 
     hayResultados = true;
 
@@ -181,33 +128,26 @@ if (filtroActivo) {
       .join("");
 
     const tr = document.createElement("tr");
-
     tr.innerHTML = `
       <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
-
       <td>
         ${pedido.cliente.nombre}<br>
         <small>${pedido.cliente.email}</small>
       </td>
-
       <td>
         Manteca: ${pedido.productos.manteca}<br>
         Grasa: ${pedido.productos.grasa}<br>
         Facturas: ${pedido.productos.facturas}
       </td>
-
       <td>${pedido.notas || "<em>—</em>"}</td>
-
       <td>
-        ${pedido.estado}
-        <br>
+        ${pedido.estado}<br>
         <small>
           (${pedido.estadoFecha
             ? pedido.estadoFecha.toDate().toLocaleString()
             : pedido.fechaCreacion.toDate().toLocaleString()})
         </small>
       </td>
-
       <td>${botonesEstado}</td>
       <td><button data-pdf>PDF</button></td>
     `;
@@ -237,31 +177,14 @@ if (filtroActivo) {
     `;
   }
 
-  // 👉 Mostrar sugerencias
-  mostrarSugerencias(
-    [...sugerenciasMap.values()],
-    textoBusqueda
-  );
-
+  mostrarSugerencias([...sugerenciasMap.values()], textoBusqueda);
   actualizarIndicadorFiltroCliente();
   actualizarContadorPedidos();
-
-
 }
 
-
-
-
-
-
-filtroEstado.addEventListener("change", () => {
-  cargarPedidos();
-});
-
-
-
-
-
+// ================================
+// SUGERENCIAS
+// ================================
 function mostrarSugerencias(sugerencias, texto) {
   sugerenciasClientes.innerHTML = "";
 
@@ -281,29 +204,18 @@ function mostrarSugerencias(sugerencias, texto) {
 
   filtradas.forEach(s => {
     const li = document.createElement("li");
-    li.textContent =
-      s.tipo === "email"
-        ? `📧 ${s.valor}`
-        : `👤 ${s.valor}`;
+    li.textContent = s.tipo === "email"
+      ? `📧 ${s.valor}`
+      : `👤 ${s.valor}`;
 
     li.style.padding = "6px";
     li.style.cursor = "pointer";
 
     li.addEventListener("click", () => {
-      // 🔑 1. Guardamos el filtro real
       filtroClienteActivo = s.valor;
-
-      // 🔑 2. Limpiamos el input visual
       busquedaCliente.value = "";
-
-      // 🔑 3. Ocultamos sugerencias
       sugerenciasClientes.style.display = "none";
-
-
       actualizarIndicadorFiltroCliente();
-
-
-      // 🔑 4. Recargamos pedidos con filtro activo
       cargarPedidos();
     });
 
@@ -312,11 +224,6 @@ function mostrarSugerencias(sugerencias, texto) {
 
   sugerenciasClientes.style.display = "block";
 }
-
-
-
-
-
 
 // ================================
 // PDF
@@ -340,46 +247,12 @@ function generarPDF(pedido) {
 }
 
 // ================================
-// SESIÓN
+// UI AUX
 // ================================
-
-
-
-// onAuthStateChanged(auth, async (user) => {
-//   if (!user) return;
-
-//   await verificarAdmin(user);
-//   await cargarPedidos();
-// });
-
-
-
-
-
-
-// Buscador filtro
-
-busquedaCliente.addEventListener("input", () => {
-  cargarPedidos();
-});
-
-filtroEstado.addEventListener("change", () => {
-  cargarPedidos();
-});
-
-
-
-
-
 function actualizarContadorPedidos() {
   const filas = tbody.querySelectorAll("tr");
   contadorPedidosNumero.textContent = filas.length;
 }
-
-
-
-
-
 
 function actualizarIndicadorFiltroCliente() {
   if (filtroClienteActivo) {
@@ -391,7 +264,9 @@ function actualizarIndicadorFiltroCliente() {
   }
 }
 
-
+// ================================
+// INIT (llamado desde main.js)
+// ================================
 window.initAdminPanel = async function () {
   await cargarPedidos();
 };
