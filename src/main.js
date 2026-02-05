@@ -55,6 +55,8 @@ const userEmail = document.getElementById("userEmail");
 
 const btnResetPass = document.getElementById("btnResetPass");
 
+const h2ingresar = document.getElementById("h2-ingresar");
+
 const btnTogglePass = document.getElementById("btnTogglePass");
 const inputPass = document.getElementById("loginPass");
 
@@ -127,13 +129,13 @@ btnResetPass.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
 
   if (!email) {
-    alert("Ingresá tu email para restablecer la contraseña");
+    alert("Ingresá tu email en la casilla de arriba de todo, para restablecer la clave");
     return;
   }
 
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("Te enviamos un email para restablecer tu contraseña, puede tardar 1 minuto en llegar (revisá el spam) 📩");
+    alert("Te enviamos un email para restablecer tu clave, puede tardar 1 minuto en llegar (revisá el spam) 📩");
   } catch (error) {
     console.error(error);
     alert("No se pudo enviar el email. Verificá el correo ingresado.");
@@ -172,6 +174,8 @@ async function cargarPedidosUsuario(uid) {
 
     const tr = document.createElement("tr");
 
+    tr.classList.add(`estado-${pedido.estado.toLowerCase()}`);
+
     tr.innerHTML = `
       <td>${pedido.fechaCreacion.toDate().toLocaleDateString()}</td>
 
@@ -186,9 +190,14 @@ async function cargarPedidosUsuario(uid) {
       </td>
 
       <td>
-        Manteca: ${pedido.productos.manteca}<br>
-        Grasa: ${pedido.productos.grasa}<br>
-        Facturas: ${pedido.productos.facturas}
+          Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
+          Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
+          Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
+          Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
+          Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
+          Frola batata: ${pedido.productos.frolaBatata}<br>
+          Ricota: ${pedido.productos.ricota}<br>
+          Ricota c/ DDL: ${pedido.productos.ricotaDDL}
       </td>
 
       <td>
@@ -227,6 +236,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // Usuario autenticado
   authSection.style.display = "none";
+  h2ingresar.style.display = "none";
   btnLogout.style.display = "inline";
   userInfo.style.display = "block";
   userEmail.textContent = user.email;
@@ -247,7 +257,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Cliente
-  seccionCliente.style.display = "block";
+  seccionCliente.style.display = "flex";
   seccionAdmin.style.display = "none";
   await cargarPedidosUsuario(user.uid);
 });
@@ -277,9 +287,15 @@ form.addEventListener("submit", async (e) => {
   const telefono = document.getElementById("telefono").value.trim();
   const emailCliente = document.getElementById("email").value.trim();
 
-  const manteca = Number(document.getElementById("manteca").value) || 0;
-  const grasa = Number(document.getElementById("grasa").value) || 0;
-  const facturas = Number(document.getElementById("facturas").value) || 0;
+const medialunaBandeja = Number(document.getElementById("medialunaBandeja").value) || 0;
+const surtidasBandeja = Number(document.getElementById("surtidasBandeja").value) || 0;
+const medialunaGrasa = Number(document.getElementById("medialunaGrasa").value) || 0;
+const medialunaManteca = Number(document.getElementById("medialunaManteca").value) || 0;
+const frolaMembrillo = Number(document.getElementById("frolaMembrillo").value) || 0;
+const frolaBatata = Number(document.getElementById("frolaBatata").value) || 0;
+const ricota = Number(document.getElementById("ricota").value) || 0;
+const ricotaDDL = Number(document.getElementById("ricotaDDL").value) || 0;
+
 
   const notas = document.getElementById("notas").value.trim();
   const fechaEntrega = document.getElementById("fechaEntrega").value;
@@ -300,11 +316,17 @@ form.addEventListener("submit", async (e) => {
       email: emailCliente
     },
 
-    productos: {
-      manteca,
-      grasa,
-      facturas
-    },
+productos: {
+  medialunaBandeja,
+  surtidasBandeja,
+  medialunaGrasa,
+  medialunaManteca,
+  frolaMembrillo,
+  frolaBatata,
+  ricota,
+  ricotaDDL
+},
+
 
     notas,
     entrega: {
@@ -312,7 +334,7 @@ form.addEventListener("submit", async (e) => {
       hora: horaEntrega
     },
 
-    estado: "pendiente",
+    estado: "Pendiente",
     fechaCreacion: new Date(),
     fechaCreacion: new Date()
   };
@@ -344,9 +366,15 @@ function generarPDF(pedido) {
   doc.text(`Email: ${pedido.cliente.email}`, 10, 60);
 
   doc.text("Productos:", 10, 75);
-  doc.text(`Manteca: ${pedido.productos.manteca}`, 10, 85);
-  doc.text(`Grasa: ${pedido.productos.grasa}`, 10, 95);
-  doc.text(`Facturas: ${pedido.productos.facturas}`, 10, 105);
+  doc.text(`Medialuna bandeja: ${pedido.productos.medialunaBandeja}`, 10, y);
+  doc.text(`Surtidas bandeja: ${pedido.productos.surtidasBandeja}`, 10, y += 10);
+  doc.text(`Medialuna grasa: ${pedido.productos.medialunaGrasa}`, 10, y += 10);
+  doc.text(`Medialuna manteca: ${pedido.productos.medialunaManteca}`, 10, y += 10);
+  doc.text(`Frola membrillo: ${pedido.productos.frolaMembrillo}`, 10, y += 10);
+  doc.text(`Frola batata: ${pedido.productos.frolaBatata}`, 10, y += 10);
+  doc.text(`Ricota: ${pedido.productos.ricota}`, 10, y += 10);
+  doc.text(`Ricota c/ DDL: ${pedido.productos.ricotaDDL}`, 10, y += 10);
+
 
   doc.text(`Estado: ${pedido.estado}`, 10, 120);
 

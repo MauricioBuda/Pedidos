@@ -4,37 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/public/css/styles.css">
-  <title>Pedido de Medialunas</title>
+  <title> Pedido de Medialunas </title>
 </head>
 <body>
 
 
+<section class="primer-section">
 
 
-  <h2>Cuenta</h2>
-
-  <button id="btnLogout" style="display:none;">Cerrar sesión</button>
 
 
-  <p id="userInfo" style="display:none;">
-  Sesión iniciada como: <strong id="userEmail"></strong>
+  <h2 class="h2-ingresar" id="h2-ingresar"> Ingresar </h2>
+
+  <button class="btnLogout" id="btnLogout" style="display:none;"> 👋 Cerrar sesión </button>
+
+
+
+
+
+<p class="userInfo" id="userInfo" style="display:none;">
+  👤 Sesión iniciada como: <strong id="userEmail"></strong> 👤
 </p>
 
 
  <div class="authSection" id="authSection">
     <input type="email" id="loginEmail" placeholder="Email" />
-    <div class="div-inputPass" style="display:inline-flex; align-items:center; gap:6px;">
-        <input class="inputPass" type="password" id="loginPass" placeholder="Contraseña" />
-        <button class="btnPass" type="button" id="btnTogglePass">👁️</button>
-    </div>
-
-  <button id="btnLogin">Iniciar sesión</button>
-  <button id="btnRegister">Registrarse</button>
-  <button id="btnGoogle">Entrar con Google</button>
-  <button id="btnResetPass">¿Olvidaste tu contraseña?</button>
+    
+<div class="div-inputPass">
+  <input class="inputPass" type="password" id="loginPass" placeholder="Contraseña" />
+  <button type="button" id="btnTogglePass" class="btnPass"> 👁️ </button>
 </div>
 
-<hr>
+
+  <button class="btnLogin" id="btnLogin"> Iniciar sesión </button>
+  <button class="btnGoogle" id="btnGoogle"> <img class="img-g" src="/public/img/googleG_transparent.png" alt="G"> Ingresar con Gmail </button>
+  <hr/>
+  <button class="btnResetPass" id="btnResetPass"> Restablecer contraseña </button>
+  <button class="btnRegister" id="btnRegister"> Crear cuenta </button>
+</div>
+
+</section>
 
 
 
@@ -44,29 +53,36 @@
 
 
 
-<div id="seccionCliente"  style="display:none;">
+<div class="seccionCliente" id="seccionCliente"  style="display:none;">
 
-  <h1>Encargar Pedido</h1>
+  <h1> Realizar nuevo pedido </h1>
 
-  <form id="pedidoForm">
+  <form class="formularioCliente" id="pedidoForm">
 
-    <h3>Datos del cliente</h3>
+    <h3> Datos del cliente </h3>
     <input type="text" id="nombre" placeholder="Nombre completo" required />
     <input type="tel" id="telefono" placeholder="Teléfono" required />
     <input type="email" id="email" placeholder="Email" required />
 
-    <h3>Pedido</h3>
-    <input type="number" id="manteca" placeholder="Medialunas de manteca (cantidad)" min="0" />
-    <input type="number" id="grasa" placeholder="Medialunas de grasa (cantidad)" min="0" />
-    <input type="number" id="facturas" placeholder="Facturas surtidas (cantidad)" min="0" />
+    <h3> Pedido (ingresar cantidad) </h3>
+
+    <input type="number" id="medialunaBandeja" placeholder="Medialuna por bandeja" min="0" />
+    <input type="number" id="surtidasBandeja" placeholder="Surtidas por bandeja" min="0" />
+    <input type="number" id="medialunaGrasa" placeholder="Medialunas de grasa" min="0" />
+    <input type="number" id="medialunaManteca" placeholder="Medialunas de manteca" min="0" />
+    <input type="number" id="frolaMembrillo" placeholder="Frola de membrillo" min="0" />
+    <input type="number" id="frolaBatata" placeholder="Frola de batata" min="0" />
+    <input type="number" id="ricota" placeholder="Ricota" min="0" />
+    <input type="number" id="ricotaDDL" placeholder="Ricota con dulce de leche" min="0" />
+
 
     <textarea id="notas" placeholder="Notas adicionales"></textarea>
 
-    <h3>Entrega</h3>
+    <h3> Fecha solicitada de entrega </h3>
     <input type="date" id="fechaEntrega" required />
     <input type="time" id="horaEntrega" required />
 
-    <button type="submit">Enviar pedido</button>
+    <button class="btnEnviarPedido" type="submit"> Enviar pedido </button>
 
   </form>
 
@@ -107,7 +123,7 @@
 </div>
 
 
-  <hr>
+  
 
 
 
@@ -115,56 +131,57 @@
 
 <div id="seccionAdmin" style="display:none;">
 
-<section>
+<section class="seccionAdmin">
 
-  <h1>Panel de Administración</h1>
+  <h1 class="h1-admin"> 🛠️ Panel de Administrador 🛠️ </h1>
 
-  <!-- <button id="btnLogoutAdmin">Cerrar sesión</button> -->
 
-  <h2>Pedidos</h2>
+  <h2 class="h2-pedidos"> 📋 Pedidos 📋 </h2>
 
-  <div style="margin-bottom:10px;">
-  <label for="filtroEstado">Filtrar por estado:</label>
-  <select id="filtroEstado">
-    <option value="todos">Todos</option>
-    <option value="pendiente">Pendiente</option>
-    <option value="entregado">Entregado</option>
-    <option value="cancelado">Cancelado</option>
-  </select>
+  <div class="divFiltros">
+
+    <div style="margin-bottom:10px;">
+      <label for="filtroEstado">Filtrar por estado 🔎:</label>
+      <select id="filtroEstado">
+        <option value="todos">Todos</option>
+        <option value="Pendiente"> Pendiente </option>
+        <option value="Entregado"> Entregado </option>
+        <option value="Cancelado"> Cancelado </option>
+      </select>
+    </div>
+
+
+
+
+    <div class="filtroPorCLiente" style="margin-bottom:10px; position:relative;">
+      <label for="busquedaCliente"> Filtrar por cliente 🧑: </label><br>
+      <input
+        type="text"
+        id="busquedaCliente"
+        placeholder="Nombre o email del cliente"
+        autocomplete="off"
+      />
+
+      <ul
+        id="sugerenciasClientes"
+        style="
+          display:none;
+          position:absolute;
+          background:#fff;
+          border:1px solid #ccc;
+          list-style:none;
+          padding:0;
+          margin:0;
+          max-height:150px;
+          overflow-y:auto;
+          width:300px;
+          z-index:10;
+        "
+      ></ul>
+    </div>
+
+
 </div>
-
-
-
-
-<div style="margin-bottom:10px; position:relative;">
-  <label for="busquedaCliente">Buscar cliente:</label><br>
-  <input
-    type="text"
-    id="busquedaCliente"
-    placeholder="Nombre o email del cliente"
-    autocomplete="off"
-  />
-
-  <ul
-    id="sugerenciasClientes"
-    style="
-      display:none;
-      position:absolute;
-      background:#fff;
-      border:1px solid #ccc;
-      list-style:none;
-      padding:0;
-      margin:0;
-      max-height:150px;
-      overflow-y:auto;
-      width:300px;
-      z-index:10;
-    "
-  ></ul>
-</div>
-
-
-
 
 
 
@@ -179,7 +196,7 @@
   id="filtroClienteActivoBox"
   style="display:none; margin: 10px 0; padding: 8px; background:#eef; border:1px solid #99c;"
 >
-  🔎 <strong>Filtrado por cliente:</strong>
+  🔎 <strong> Filtrado por cliente: </strong>
   <span id="filtroClienteTexto"></span>
   <button id="btnLimpiarFiltroCliente" style="margin-left:10px;">
     ✕
@@ -203,13 +220,13 @@
   <table border="1">
     <thead>
       <tr>
-        <th>Fecha</th>
-        <th>Cliente</th>
-        <th>Productos</th>
-        <th>Notas</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-        <th>PDF</th>
+        <th> Fecha </th>
+        <th> Cliente </th>
+        <th> Productos </th>
+        <th> Notas </th>
+        <th> Estado </th>
+        <th> Cambiar estado a... </th>
+        <th>  PDF  </th>
       </tr>
     </thead>
     <tbody id="adminPedidosBody">
@@ -218,6 +235,8 @@
   </table>
 
   <script type="module" src="/src/admin.js"></script>
+
+  
 </section>
 
 

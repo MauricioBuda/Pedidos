@@ -1,41 +1,252 @@
 *,
 *::before,
 *::after {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+button {
+  margin: 0 5px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+input {
+  padding: 3px;
+}
+
 
 
 
 
 /* INICIO DE INICIO DE SESION */
 
+.primer-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 150px;
+}
+
+
+
+.btnLogout {
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  color: white;
+  background-color: red;
+  padding: 8px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.userInfo {
+position: absolute;
+right: 75%;
+top: 5%;
+}
+
+
+.h2-ingresar {
+  margin-bottom: 2vh;
+}
+
+
 .authSection{
   flex-direction: column;
-  gap: 10px;
+  gap: 2vh;
 }
 
 .authSection input, .authSection button{
   min-width: 300px;
   text-align: center;
+  border-radius: 5px;
+  padding: 8px;
 }
 
 .div-inputPass{
-  display: flex;
-  flex-direction: row;
+  position: relative;
+  width: 300px;
 }
 
 .inputPass{
-  min-width: 245px!important;
+  width: 100%;
+  padding-right: 40px;
 }
 
 .btnPass{
-  min-width: 45px!important;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  min-width: auto !important;
+}
+
+
+.btnLogin {
+  background-color: gray;
+  color: white;
+}
+
+.btnGoogle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 2.5vh 0;
+}
+
+
+.img-g {
+  width: 1.2vw;
+}
+
+.btnRegister {
+  border: none;
+}
+
+.btnResetPass {
+  border: none;
+  color: blue;
+  background-color: white;
 }
 
 /* FIN DE INICIO DE SESION */
+
+
+
+
+
+/* INICIO FORMULARIO */
+
+.formularioCliente {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.formularioCliente input {
+border-radius: 5px;
+padding: 5px;
+min-width: 30vw;
+}
+
+.btnEnviarPedido{
+  max-width: 5vw;
+}
+
+/* INICIO FORMULARIO */
+
+
+
+
+
+
+
+
+/* INICIO DE SECCION ADMIN */
+
+.seccionAdmin{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.h1-admin {
+  margin-bottom: 4vh;
+}
+
+.h2-pedidos {
+  margin-bottom: 4vh;
+}
+
+.divFiltros {
+  display: flex;
+  gap: 5vw;
+}
+
+.filtroPorCLiente {
+  display: flex;
+}
+
+/* FIN DE SECCION ADMIN */
+
+.seccionCliente{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* INICIO TABLA */
+
+th {
+  padding: 30px;
+}
+
+td {
+  text-align: center;
+  padding: 10px
+}
+
+.btnPDF {
+  background-color: white;
+  padding: 5px;
+}
+
+
+/* COLORES POR ESTADO DE PEDIDO */
+
+.estado-pendiente {
+  background-color: rgb(199, 199, 199);
+}
+
+.estado-pendiente td {
+  border: 2px solid rgb(105, 105, 105);
+}
+
+.estado-entregado {
+  background-color: #a5d6a7;
+}
+
+.estado-entregado td {
+  border: 2px solid #516852;
+}
+
+.estado-cancelado {
+  background-color: #f8d7da;
+}
+
+.estado-cancelado td {
+  border: 2px solid red;
+}
+
+
+
+/* FIN TABLA */

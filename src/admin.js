@@ -121,24 +121,34 @@ async function cargarPedidos() {
 
     hayResultados = true;
 
-    const estados = ["pendiente", "entregado", "cancelado"];
+    const estados = ["Pendiente", "Entregado", "Cancelado"];
     const botonesEstado = estados
       .filter(e => e !== pedido.estado)
       .map(e => `<button data-accion="${e}">${e}</button>`)
       .join("");
 
     const tr = document.createElement("tr");
+
+    tr.classList.add(`estado-${pedido.estado.toLowerCase()}`);
+
+
     tr.innerHTML = `
       <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
       <td>
         ${pedido.cliente.nombre}<br>
         <small>${pedido.cliente.email}</small>
       </td>
-      <td>
-        Manteca: ${pedido.productos.manteca}<br>
-        Grasa: ${pedido.productos.grasa}<br>
-        Facturas: ${pedido.productos.facturas}
-      </td>
+        <td>
+          Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
+          Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
+          Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
+          Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
+          Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
+          Frola batata: ${pedido.productos.frolaBatata}<br>
+          Ricota: ${pedido.productos.ricota}<br>
+          Ricota c/ DDL: ${pedido.productos.ricotaDDL}
+        </td>
+
       <td>${pedido.notas || "<em>—</em>"}</td>
       <td>
         ${pedido.estado}<br>
@@ -149,7 +159,7 @@ async function cargarPedidos() {
         </small>
       </td>
       <td>${botonesEstado}</td>
-      <td><button data-pdf>PDF</button></td>
+      <td>  <button data-pdf  class="btnPDF">  Descargar PDF  </button> 📥 </td>
     `;
 
     tr.querySelectorAll("[data-accion]").forEach(btn => {
@@ -237,9 +247,15 @@ function generarPDF(pedido) {
   doc.text(`Teléfono: ${pedido.cliente.telefono}`, 10, 40);
 
   doc.text("Productos:", 10, 55);
-  doc.text(`Manteca: ${pedido.productos.manteca}`, 10, 65);
-  doc.text(`Grasa: ${pedido.productos.grasa}`, 10, 75);
-  doc.text(`Facturas: ${pedido.productos.facturas}`, 10, 85);
+  doc.text(`Medialuna bandeja: ${pedido.productos.medialunaBandeja}`, 10, y);
+  doc.text(`Surtidas bandeja: ${pedido.productos.surtidasBandeja}`, 10, y += 10);
+  doc.text(`Medialuna grasa: ${pedido.productos.medialunaGrasa}`, 10, y += 10);
+  doc.text(`Medialuna manteca: ${pedido.productos.medialunaManteca}`, 10, y += 10);
+  doc.text(`Frola membrillo: ${pedido.productos.frolaMembrillo}`, 10, y += 10);
+  doc.text(`Frola batata: ${pedido.productos.frolaBatata}`, 10, y += 10);
+  doc.text(`Ricota: ${pedido.productos.ricota}`, 10, y += 10);
+  doc.text(`Ricota c/ DDL: ${pedido.productos.ricotaDDL}`, 10, y += 10);
+
 
   doc.text(`Estado: ${pedido.estado}`, 10, 100);
 
