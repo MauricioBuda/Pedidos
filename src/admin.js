@@ -29,30 +29,32 @@ let filtroClienteActivo = null;
 // DOM
 // ================================
 const tbody = document.getElementById("adminPedidosBody");
-const btnLogout = document.getElementById("btnLogout");
+// const btnLogout = document.getElementById("btnLogoutAdmin");
 
 // ================================
 // LOGOUT
 // ================================
-btnLogout.addEventListener("click", async () => {
-  await signOut(auth);
-  window.location.href = "/";
-});
+
+
+// btnLogout.addEventListener("click", async () => {
+//   await signOut(auth);
+//   window.location.href = "/";
+// });
 
 // ================================
 // VERIFICAR ROL ADMIN
 // ================================
 import { getDoc } from "firebase/firestore";
 
-async function verificarAdmin(user) {
-  const ref = doc(db, "usuarios", user.uid);
-  const snap = await getDoc(ref);
+// async function verificarAdmin(user) {
+//   const ref = doc(db, "usuarios", user.uid);
+//   const snap = await getDoc(ref);
 
-  if (!snap.exists() || snap.data().rol !== "admin") {
-    alert("Acceso denegado");
-    window.location.href = "/";
-  }
-}
+//   if (!snap.exists() || snap.data().rol !== "admin") {
+//     alert("Acceso denegado");
+//     window.location.href = "/";
+//   }
+// }
 
 const loadingAdmin = document.getElementById("loadingAdmin");
 
@@ -340,15 +342,16 @@ function generarPDF(pedido) {
 // ================================
 // SESIÓN
 // ================================
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "/";
-    return;
-  }
 
-  await verificarAdmin(user);
-  await cargarPedidos();
-});
+
+
+// onAuthStateChanged(auth, async (user) => {
+//   if (!user) return;
+
+//   await verificarAdmin(user);
+//   await cargarPedidos();
+// });
+
 
 
 
@@ -389,3 +392,6 @@ function actualizarIndicadorFiltroCliente() {
 }
 
 
+window.initAdminPanel = async function () {
+  await cargarPedidos();
+};

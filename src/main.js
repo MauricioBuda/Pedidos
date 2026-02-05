@@ -41,8 +41,7 @@ async function crearPerfilUsuario(user) {
 const pedidosBody = document.getElementById("pedidosBody");
 
 const seccionCliente = document.getElementById("seccionCliente");
-// seccionCliente.style.display = "none"; // admin
-// seccionCliente.style.display = "block"; // cliente
+
 
 const form = document.getElementById("pedidoForm");
 
@@ -62,7 +61,7 @@ const inputPass = document.getElementById("loginPass");
 const loadingPedidos = document.getElementById("loadingPedidos");
 
 
-
+const seccionAdmin = document.getElementById("seccionAdmin");
 
 const authSection = document.getElementById("authSection");
 
@@ -216,67 +215,46 @@ async function cargarPedidosUsuario(uid) {
 
 
 
-// const btnAdmin = document.getElementById("btnAdmin");
-
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    await crearPerfilUsuario(user);
-
-  // Para mostrar quien inicia sesion
-    userEmail.textContent = user.email;
-    userInfo.style.display = "block";
-
-
-    // Ocultar botones de login
-    btnLogin.style.display = "none";
-    btnRegister.style.display = "none";
-    btnGoogle.style.display = "none";
-    btnResetPass.style.display = "none";
-
-    document.getElementById("loginEmail").style.display = "none";
-    document.getElementById("loginPass").style.display = "none";
-
-    btnTogglePass.style.display = "none";
-
-    // Mostrar logout
-    btnLogout.style.display = "inline";
-
-    const ref = doc(db, "usuarios", user.uid);
-    const snap = await getDoc(ref);
-
-    if (snap.exists() && snap.data().rol === "admin") {
-      window.location.href = "/admin.html";
-      return;
-    }
-
-    // Cliente
-    seccionCliente.style.display = "block";
-    await cargarPedidosUsuario(user.uid);
-
-  } else {
-
-  // Para mostrar quien inicia sesion
-    userInfo.style.display = "none";
-    userEmail.textContent = "";
-
-    // Mostrar botones de login
-    btnLogin.style.display = "inline";
-    btnRegister.style.display = "inline";
-    btnGoogle.style.display = "inline";
-
-    btnTogglePass.style.display = "inline";
-
-
-    // Ocultar logout y contenido
-    btnLogout.style.display = "none";
+  if (!user) {
+    authSection.style.display = "block";
     seccionCliente.style.display = "none";
-    pedidosBody.innerHTML = "";
-    btnResetPass.style.display = "inline";
-
-    document.getElementById("loginEmail").style.display = "inline";
-    document.getElementById("loginPass").style.display = "inline";
+    seccionAdmin.style.display = "none";
+    btnLogout.style.display = "none";
+    userInfo.style.display = "none";
+    return;
   }
+
+  // Usuario autenticado
+  authSection.style.display = "none";
+  btnLogout.style.display = "inline";
+  userInfo.style.display = "block";
+  userEmail.textContent = user.email;
+
+  await crearPerfilUsuario(user);
+
+  const ref = doc(db, "usuarios", user.uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists() && snap.data().rol === "admin") {
+    seccionAdmin.style.display = "block";
+    seccionCliente.style.display = "none";
+
+    if (window.initAdminPanel) {
+      window.initAdminPanel();
+    }
+    return;
+  }
+
+  // Cliente
+  seccionCliente.style.display = "block";
+  seccionAdmin.style.display = "none";
+  await cargarPedidosUsuario(user.uid);
 });
+
+
+
+
 
 
 

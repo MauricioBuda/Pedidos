@@ -8,10 +8,13 @@
 </head>
 <body>
 
-<!-- <div class="container"> -->
+
 
 
   <h2>Cuenta</h2>
+
+  <button id="btnLogout" style="display:none;">Cerrar sesión</button>
+
 
   <p id="userInfo" style="display:none;">
   Sesión iniciada como: <strong id="userEmail"></strong>
@@ -29,7 +32,6 @@
   <button id="btnRegister">Registrarse</button>
   <button id="btnGoogle">Entrar con Google</button>
   <button id="btnResetPass">¿Olvidaste tu contraseña?</button>
-  <button id="btnLogout" style="display:none;">Cerrar sesión</button>
 </div>
 
 <hr>
@@ -37,10 +39,6 @@
 
 
 
-
-<!-- <button id="btnAdmin" style="display:none;">
-  Ir al Panel Admin
-</button> -->
 
 
 
@@ -115,7 +113,116 @@
 
 
 
-<!-- </div> -->
+<div id="seccionAdmin" style="display:none;">
+
+<section>
+
+  <h1>Panel de Administración</h1>
+
+  <!-- <button id="btnLogoutAdmin">Cerrar sesión</button> -->
+
+  <h2>Pedidos</h2>
+
+  <div style="margin-bottom:10px;">
+  <label for="filtroEstado">Filtrar por estado:</label>
+  <select id="filtroEstado">
+    <option value="todos">Todos</option>
+    <option value="pendiente">Pendiente</option>
+    <option value="entregado">Entregado</option>
+    <option value="cancelado">Cancelado</option>
+  </select>
+</div>
+
+
+
+
+<div style="margin-bottom:10px; position:relative;">
+  <label for="busquedaCliente">Buscar cliente:</label><br>
+  <input
+    type="text"
+    id="busquedaCliente"
+    placeholder="Nombre o email del cliente"
+    autocomplete="off"
+  />
+
+  <ul
+    id="sugerenciasClientes"
+    style="
+      display:none;
+      position:absolute;
+      background:#fff;
+      border:1px solid #ccc;
+      list-style:none;
+      padding:0;
+      margin:0;
+      max-height:150px;
+      overflow-y:auto;
+      width:300px;
+      z-index:10;
+    "
+  ></ul>
+</div>
+
+
+
+
+
+
+<p id="loadingAdmin" style="display:none;">
+  Cargando pedidos...
+</p>
+
+
+
+
+<div
+  id="filtroClienteActivoBox"
+  style="display:none; margin: 10px 0; padding: 8px; background:#eef; border:1px solid #99c;"
+>
+  🔎 <strong>Filtrado por cliente:</strong>
+  <span id="filtroClienteTexto"></span>
+  <button id="btnLimpiarFiltroCliente" style="margin-left:10px;">
+    ✕
+  </button>
+</div>
+
+
+<div
+  id="contadorPedidos"
+  style="margin: 10px 0; font-weight: bold;"
+>
+  📦 Pedidos en pantalla: <span id="contadorPedidosNumero">0</span>
+</div>
+
+
+
+
+
+
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Productos</th>
+        <th>Notas</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody id="adminPedidosBody">
+      <!-- Se llena por JS -->
+    </tbody>
+  </table>
+
+  <script type="module" src="/src/admin.js"></script>
+</section>
+
+
+</div>
+
 
 
 
