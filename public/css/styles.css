@@ -10,7 +10,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: #f7f7f7;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +26,7 @@ button {
   padding: 5px;
   cursor: pointer;
 }
+
 
 input {
   padding: 3px;
@@ -61,6 +62,10 @@ input {
   padding: 8px;
   border-radius: 5px;
   font-weight: 600;
+}
+
+.btnLogout:hover {
+  background-color: rgba(255, 0, 0, 0.563);
 }
 
 .userInfo {
@@ -99,7 +104,7 @@ top: 5%;
 
 .btnPass{
   position: absolute;
-  right: 8px;
+  right: 0px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -115,12 +120,22 @@ top: 5%;
   color: white;
 }
 
+.btnLogin:hover {
+  background-color: rgba(128, 128, 128, 0.309);
+  color: black;
+}
+
 .btnGoogle {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   margin: 2.5vh 0;
+}
+
+.btnGoogle:hover {
+  background-color: rgba(128, 128, 128, 0.309);
+  color: black;
 }
 
 
@@ -133,6 +148,11 @@ top: 5%;
   font-weight: bold;
 }
 
+.btnRegister:hover, .btnResetPass:hover {
+  color: blue;
+  background-color: wheat;
+}
+
 .btnResetPass {
   font-weight: bold;
   border: none;
@@ -141,6 +161,11 @@ top: 5%;
 }
 
 /* FIN DE INICIO DE SESION */
+
+
+
+
+
 
 
 
@@ -179,6 +204,11 @@ min-width: 30vw;
   font-weight: bold;
   color: white;
   font-size: 1.2vw;
+}
+
+.btnEnviarPedido:hover{
+  background-color: rgba(0, 128, 0, 0.561);
+  color: black;
 }
 
 
@@ -286,6 +316,10 @@ td {
 .btnPDF {
   background-color: white;
   padding: 5px;
+}
+
+.btnPDF:hover {
+  background-color: rgba(222, 222, 222, 0.683);
 }
 
 
