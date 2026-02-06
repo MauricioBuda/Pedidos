@@ -1,0 +1,219 @@
+/* INICIO TABLA */
+
+th {
+  padding: 30px;
+}
+
+td {
+  text-align: center;
+  padding: 10px
+}
+
+.btnPDF {
+  background-color: white;
+  padding: 5px;
+}
+
+.btnPDF:hover {
+  background-color: rgba(222, 222, 222, 0.683);
+}
+
+
+/* COLORES POR ESTADO DE PEDIDO */
+
+.estado-pendiente {
+  background-color: rgba(255, 255, 0, 0.553);
+}
+
+.estado-pendiente td {
+  border: 3px solid gray;
+}
+
+.estado-entregado {
+  background-color: #a5d6a7;
+}
+
+.estado-entregado td {
+  border: 3px solid rgba(0, 128, 0, 0.694);
+}
+
+.estado-cancelado {
+  background-color: rgb(253, 97, 97);
+}
+
+.estado-cancelado td {
+  border: 3px solid red;
+}
+
+.divFiltros {
+  display: flex;
+  gap: 5vw;
+}
+
+.filtroPorCLiente {
+  display: flex;
+  position: relative;
+}
+
+#sugerenciasClientes {
+  top: 100%;
+  margin-top: 4px;
+}
+
+#busquedaCliente {
+  width: 180px;
+}
+
+#filtroEstado {
+  width: 150px;
+  height: 25px;
+}
+
+/* FIN TABLA */
+
+
+
+
+
+
+/* ================= MOBILE CARDS ================= */
+
+@media screen and (max-width: 768px) {
+
+    #busquedaCliente {
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    width:53%;
+    box-sizing: border-box;
+  }
+
+  #tablaPedidos{
+    width: 100%;
+  }
+
+  #busquedaCliente::placeholder {
+    font-size: 0.7rem;
+    color: #777;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 20px;
+    padding: 14px;
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  }
+
+  /* ===== COLORES POR ESTADO ===== */
+
+  .estado-pendiente {
+    background: #fff9c4;
+    border: 2px solid #9e9e9e;
+  }
+
+  .estado-entregado {
+    background: #dcedc8;
+    border: 2px solid #2e7d32;
+  }
+
+  .estado-cancelado {
+    background: #ffcdd2;
+    border: 2px solid #b71c1c;
+  }
+
+  td {
+    padding: 8px 0;
+    font-size: 0.95rem;
+    border: none;
+  }
+
+  /* LABEL */
+  td::before {
+    display: block;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  td:nth-of-type(1)::before { content: "📅 Fecha"; }
+  td:nth-of-type(2)::before { content: "👤 Cliente"; }
+  td:nth-of-type(3)::before { content: "🧺 Productos"; }
+  td:nth-of-type(4)::before { content: "📝 Notas"; }
+  td:nth-of-type(5)::before { content: "📌 Estado"; }
+  td:nth-of-type(6)::before { content: "⚙️ Cambiar estado a..."; }
+  td:nth-of-type(7)::before { content: "📄 PDF"; }
+
+  /* CONTENIDO */
+  td > * {
+    margin-left: 8px;
+  }
+
+  /* PRODUCTOS */
+  td:nth-of-type(3) {
+    line-height: 1.45;
+  }
+
+  /* BOTONES */
+  td:nth-of-type(6),
+  td:nth-of-type(7) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  td button {
+    width: 90%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0 auto;
+  }
+
+  .btnPDF {
+    background: white;
+    border: 2px solid #333;
+    position: relative;
+  }
+
+.btnPDF {
+    position: relative;
+    color: transparent; /* oculta texto original + icono */
+  }
+
+  .btnPDF::before {
+    content: "Descargar PDF";
+    color: #000;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+    /* Oculta texto suelto (⬇️) dentro de la celda PDF */
+  td:nth-of-type(7) {
+    font-size: 0;
+  }
+
+  /* Restaura texto del botón */
+  td:nth-of-type(7) .btnPDF {
+    font-size: 0.95rem;
+  }
+
+}

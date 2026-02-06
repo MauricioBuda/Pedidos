@@ -1,0 +1,89 @@
+/* INICIO DE GENERALES */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+button {
+  margin: 0 5px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+
+input {
+  padding: 3px;
+}
+/* FIN DE GENERALES */
+
+
+
+
+
+/* MOBILE ↓↓↓*/
+
+@media screen and (max-width: 768px) {
+
+  body {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  button {
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+
+  td,
+  td *,
+  button {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  td {
+    overflow: hidden;
+  }
+
+  td button {
+    margin: 0;
+  
+
+}
+
+
+}

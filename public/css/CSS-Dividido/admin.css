@@ -1,0 +1,84 @@
+/* INICIO DE SECCION ADMIN */
+
+.seccionAdmin{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.h1-admin {
+  margin-bottom: 4vh;
+}
+
+.h2-pedidos {
+  margin-bottom: 4vh;
+}
+
+.seccionCliente{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* FIN DE SECCION ADMIN */
+
+
+
+
+
+/* MOBILE ↓↓↓*/
+
+@media screen and (max-width: 768px) {
+
+.seccionCliente{
+min-width: 90%
+}
+
+
+  /* Oculta el texto "Sesión iniciada como:" */
+  .userInfo {
+    font-size: 0;
+  }
+
+  /* Restaura solo el mail */
+  .userInfo strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+
+  .seccionAdmin {
+    width: 100%;
+  }
+
+  .divFiltros {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+
+  #filtroEstado {
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  #busquedaCliente {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  #sugerenciasClientes {
+    width: 100%;
+  }
+
+  #contadorPedidos {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+}
+
