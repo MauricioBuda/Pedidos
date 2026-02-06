@@ -3,13 +3,16 @@
 // ================================
 import { db } from "./firebase";
 import {
-  collection,
+  query,
+  where,
   getDocs,
+  collection,
   doc,
-  updateDoc,
-  orderBy,
-  query
+  getDoc,
+  setDoc,
+  runTransaction
 } from "firebase/firestore";
+
 import jsPDF from "jspdf";
 
 // ================================
@@ -168,35 +171,38 @@ async function cargarPedidos() {
     tr.classList.add(`estado-${pedido.estado.toLowerCase()}`);
 
 
-    tr.innerHTML = `
-      <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
-      <td>
-        ${pedido.cliente.nombre}<br>
-        <small>${pedido.cliente.email}</small>
-      </td>
-        <td>
-          Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
-          Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
-          Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
-          Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
-          Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
-          Frola batata: ${pedido.productos.frolaBatata}<br>
-          Ricota: ${pedido.productos.ricota}<br>
-          Ricota c/ DDL: ${pedido.productos.ricotaDDL}
-        </td>
+tr.innerHTML = `
+  <td><strong>#${String(pedido.numeroPedido).padStart(6, "0")}</strong></td>
+  <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
+  <td>
+    ${pedido.cliente.nombre}<br>
+    <small>${pedido.cliente.email}</small>
+  </td>
+  <td>
+    Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
+    Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
+    Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
+    Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
+    Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
+    Frola batata: ${pedido.productos.frolaBatata}<br>
+    Ricota: ${pedido.productos.ricota}<br>
+    Ricota c/ DDL: ${pedido.productos.ricotaDDL}
+  </td>
+  <td>${pedido.notas || "<em>—</em>"}</td>
+  <td>
+    ${pedido.estado}<br>
+    <small>
+      (${pedido.estadoFecha
+        ? pedido.estadoFecha.toDate().toLocaleString()
+        : pedido.fechaCreacion.toDate().toLocaleString()})
+    </small>
+  </td>
+  <td>${botonesEstado}</td>
+  <td>
+    <button class="btnPDF">Descargar PDF</button>
+  </td>
+`;
 
-      <td>${pedido.notas || "<em>—</em>"}</td>
-      <td>
-        ${pedido.estado}<br>
-        <small>
-          (${pedido.estadoFecha
-            ? pedido.estadoFecha.toDate().toLocaleString()
-            : pedido.fechaCreacion.toDate().toLocaleString()})
-        </small>
-      </td>
-      <td>${botonesEstado}</td>
-      <td>  <button data-pdf  class="btnPDF">  Descargar PDF  </button> ⬇️ </td>
-    `;
 
     tr.querySelectorAll("[data-accion]").forEach(btn => {
       btn.addEventListener("click", async () => {
@@ -274,29 +280,142 @@ function mostrarSugerencias(sugerencias, texto) {
 // ================================
 // PDF
 // ================================
+
+
 function generarPDF(pedido) {
   const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
 
-  doc.text("Pedido - Panel Admin", 10, 10);
-  doc.text(`Cliente: ${pedido.cliente.nombre}`, 10, 20);
-  doc.text(`Email: ${pedido.cliente.email}`, 10, 30);
-  doc.text(`Teléfono: ${pedido.cliente.telefono}`, 10, 40);
+  // =========================
+  // TÍTULO
+  // =========================
+  doc.setFontSize(16);
+  doc.setTextColor(0);
+  doc.text("Pedido recibido", pageWidth / 2, y, { align: "center" });
 
-  doc.text("Productos:", 10, 55);
-  doc.text(`Medialuna bandeja: ${pedido.productos.medialunaBandeja}`, 10, y);
-  doc.text(`Surtidas bandeja: ${pedido.productos.surtidasBandeja}`, 10, y += 10);
-  doc.text(`Medialuna grasa: ${pedido.productos.medialunaGrasa}`, 10, y += 10);
-  doc.text(`Medialuna manteca: ${pedido.productos.medialunaManteca}`, 10, y += 10);
-  doc.text(`Frola membrillo: ${pedido.productos.frolaMembrillo}`, 10, y += 10);
-  doc.text(`Frola batata: ${pedido.productos.frolaBatata}`, 10, y += 10);
-  doc.text(`Ricota: ${pedido.productos.ricota}`, 10, y += 10);
-  doc.text(`Ricota c/ DDL: ${pedido.productos.ricotaDDL}`, 10, y += 10);
+  y += 6;
+  doc.setFontSize(11);
+  doc.setTextColor(100);
+  doc.text(
+    `Pedido Nº ${String(pedido.numeroPedido).padStart(6, "0")}`,
+    pageWidth / 2,
+    y,
+    { align: "center" }
+  );
 
+  y += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(150);
+  doc.text(
+    `PDF generado el ${new Date().toLocaleString()}`,
+    pageWidth / 2,
+    y,
+    { align: "center" }
+  );
 
-  doc.text(`Estado: ${pedido.estado}`, 10, 100);
+  // Línea
+  y += 8;
+  doc.setDrawColor(180);
+  doc.line(15, y, pageWidth - 15, y);
 
-  doc.save("pedido-admin.pdf");
+  // =========================
+  // DATOS CLIENTE
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.setTextColor(0);
+  doc.text("Datos del cliente", 15, y);
+
+  y += 8;
+  doc.setFontSize(10);
+  doc.text(`Nombre: ${pedido.cliente.nombre}`, 15, y); y += 6;
+  doc.text(`Email: ${pedido.cliente.email}`, 15, y); y += 6;
+  doc.text(`Teléfono: ${pedido.cliente.telefono}`, 15, y); y += 6;
+  doc.text(
+    `Fecha del pedido: ${pedido.fechaCreacion.toDate().toLocaleString()}`,
+    15,
+    y
+  );
+
+  // Línea
+  y += 8;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // PRODUCTOS
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.text("Productos solicitados", 15, y);
+
+  y += 8;
+  doc.setFontSize(10);
+
+  const productos = [
+    ["Medialuna por bandeja", pedido.productos.medialunaBandeja],
+    ["Surtidas por bandeja", pedido.productos.surtidasBandeja],
+    ["Medialuna de grasa", pedido.productos.medialunaGrasa],
+    ["Medialuna de manteca", pedido.productos.medialunaManteca],
+    ["Frola de membrillo", pedido.productos.frolaMembrillo],
+    ["Frola de batata", pedido.productos.frolaBatata],
+    ["Ricota", pedido.productos.ricota],
+    ["Ricota c/ dulce de leche", pedido.productos.ricotaDDL],
+  ];
+
+  productos.forEach(([nombre, cantidad]) => {
+    doc.text(`${nombre}:`, 15, y);
+    doc.text(String(cantidad), pageWidth - 20, y, { align: "right" });
+    y += 6;
+  });
+
+  // Línea
+  y += 4;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // NOTAS
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.text("Notas", 15, y);
+
+  y += 8;
+  doc.setFontSize(10);
+  doc.text(pedido.notas || "— Sin notas —", 15, y);
+
+  // Línea
+  y += 8;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // ESTADO
+  // =========================
+  y += 10;
+  doc.setFontSize(11);
+  doc.setTextColor(0);
+
+  const fechaEstado = pedido.estadoFecha
+    ? pedido.estadoFecha.toDate().toLocaleString()
+    : pedido.fechaCreacion.toDate().toLocaleString();
+
+  let textoEstado =
+    pedido.estado === "Pendiente"
+      ? `Estado del pedido: ${pedido.estado} (desde ${fechaEstado} hs)`
+      : `Estado del pedido: ${pedido.estado} (${fechaEstado})`;
+
+  doc.text(textoEstado, 15, y);
+
+  doc.save(`pedido-${String(pedido.numeroPedido).padStart(6, "0")}.pdf`);
 }
+
+
+
+
+
+
+
+
 
 // ================================
 // UI AUX

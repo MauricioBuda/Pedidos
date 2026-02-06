@@ -1,9 +1,10 @@
 // ================================
 // IMPORTS
 // ================================
+
 import jsPDF from "jspdf";
-import { query, where, getDocs } from "firebase/firestore";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { query, where, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, runTransaction } from "firebase/firestore";
 import { auth, googleProvider, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -14,7 +15,8 @@ import {
   sendPasswordResetEmail
 } from "firebase/auth";
 
-import { collection, addDoc } from "firebase/firestore";
+
+
 
 // ================================
 // REFERENCIAS AL DOM
@@ -178,38 +180,33 @@ async function cargarPedidosUsuario(uid) {
 
     tr.classList.add(`estado-${pedido.estado.toLowerCase()}`);
 
-    tr.innerHTML = `
-      <td>${pedido.fechaCreacion.toDate().toLocaleDateString()}</td>
+tr.innerHTML = `
+  <td><strong>#${String(pedido.numeroPedido).padStart(6, "0")}</strong></td>
+  <td>${pedido.fechaCreacion.toDate().toLocaleDateString()}</td>
+  <td>
+    ${pedido.estado}<br>
+    <small>
+      (${pedido.estadoFecha
+        ? pedido.estadoFecha.toDate().toLocaleString()
+        : pedido.fechaCreacion.toDate().toLocaleString()})
+    </small>
+  </td>
+  <td>
+    Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
+    Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
+    Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
+    Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
+    Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
+    Frola batata: ${pedido.productos.frolaBatata}<br>
+    Ricota: ${pedido.productos.ricota}<br>
+    Ricota c/ DDL: ${pedido.productos.ricotaDDL}
+  </td>
+  <td>${pedido.notas || "<em>—</em>"}</td>
+  <td>
+    <button class="btnPDF">Descargar PDF</button>
+  </td>
+`;
 
-      <td>
-        ${pedido.estado}
-        <br>
-        <small>
-          (${pedido.estadoFecha
-            ? pedido.estadoFecha.toDate().toLocaleString()
-            : pedido.fechaCreacion.toDate().toLocaleString()})
-        </small>
-      </td>
-
-      <td>
-          Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
-          Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
-          Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
-          Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
-          Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
-          Frola batata: ${pedido.productos.frolaBatata}<br>
-          Ricota: ${pedido.productos.ricota}<br>
-          Ricota c/ DDL: ${pedido.productos.ricotaDDL}
-      </td>
-
-      <td>
-        ${pedido.notas ? pedido.notas : "<em>—</em>"}
-      </td>
-
-      <td>
-        <button data-pdf  class="btnPDF">  Descargar PDF  </button> ⬇️ 
-      </td>
-    `;
 
     tr.querySelector("button").addEventListener("click", () => {
       generarPDF(pedido);
@@ -329,15 +326,14 @@ form.addEventListener("submit", async (e) => {
   const telefono = document.getElementById("telefono").value.trim();
   const emailCliente = document.getElementById("email").value.trim();
 
-const medialunaBandeja = Number(document.getElementById("medialunaBandeja").value) || 0;
-const surtidasBandeja = Number(document.getElementById("surtidasBandeja").value) || 0;
-const medialunaGrasa = Number(document.getElementById("medialunaGrasa").value) || 0;
-const medialunaManteca = Number(document.getElementById("medialunaManteca").value) || 0;
-const frolaMembrillo = Number(document.getElementById("frolaMembrillo").value) || 0;
-const frolaBatata = Number(document.getElementById("frolaBatata").value) || 0;
-const ricota = Number(document.getElementById("ricota").value) || 0;
-const ricotaDDL = Number(document.getElementById("ricotaDDL").value) || 0;
-
+  const medialunaBandeja = Number(document.getElementById("medialunaBandeja").value) || 0;
+  const surtidasBandeja = Number(document.getElementById("surtidasBandeja").value) || 0;
+  const medialunaGrasa = Number(document.getElementById("medialunaGrasa").value) || 0;
+  const medialunaManteca = Number(document.getElementById("medialunaManteca").value) || 0;
+  const frolaMembrillo = Number(document.getElementById("frolaMembrillo").value) || 0;
+  const frolaBatata = Number(document.getElementById("frolaBatata").value) || 0;
+  const ricota = Number(document.getElementById("ricota").value) || 0;
+  const ricotaDDL = Number(document.getElementById("ricotaDDL").value) || 0;
 
   const notas = document.getElementById("notas").value.trim();
   const fechaEntrega = document.getElementById("fechaEntrega").value;
@@ -348,43 +344,64 @@ const ricotaDDL = Number(document.getElementById("ricotaDDL").value) || 0;
     return;
   }
 
-  const pedido = {
-    uid: auth.currentUser.uid,
-    emailCuenta: auth.currentUser.email,
-
-    cliente: {
-      nombre,
-      telefono,
-      email: emailCliente
-    },
-
-productos: {
-  medialunaBandeja,
-  surtidasBandeja,
-  medialunaGrasa,
-  medialunaManteca,
-  frolaMembrillo,
-  frolaBatata,
-  ricota,
-  ricotaDDL
-},
-
-
-    notas,
-    entrega: {
-      fecha: fechaEntrega,
-      hora: horaEntrega
-    },
-
-    estado: "Pendiente",
-    fechaCreacion: new Date(),
-    fechaCreacion: new Date()
-  };
-
   try {
-    await addDoc(collection(db, "pedidos"), pedido);
+    const contadorRef = doc(db, "contadores", "pedidos");
+    const pedidosRef = collection(db, "pedidos");
+
+    await runTransaction(db, async (transaction) => {
+      const contadorSnap = await transaction.get(contadorRef);
+
+      if (!contadorSnap.exists()) {
+        throw new Error("No existe el contador de pedidos");
+      }
+
+      const ultimoNumero = contadorSnap.data().ultimoNumero;
+      const nuevoNumero = ultimoNumero + 1;
+
+      transaction.update(contadorRef, {
+        ultimoNumero: nuevoNumero
+      });
+
+      const nuevoPedidoRef = doc(pedidosRef);
+
+      transaction.set(nuevoPedidoRef, {
+        numeroPedido: nuevoNumero,
+
+        uid: auth.currentUser.uid,
+        emailCuenta: auth.currentUser.email,
+
+        cliente: {
+          nombre,
+          telefono,
+          email: emailCliente
+        },
+
+        productos: {
+          medialunaBandeja,
+          surtidasBandeja,
+          medialunaGrasa,
+          medialunaManteca,
+          frolaMembrillo,
+          frolaBatata,
+          ricota,
+          ricotaDDL
+        },
+
+        notas,
+
+        entrega: {
+          fecha: fechaEntrega,
+          hora: horaEntrega
+        },
+
+        estado: "Pendiente",
+        fechaCreacion: new Date()
+      });
+    });
+
     alert("Pedido enviado correctamente 🎉");
     form.reset();
+
   } catch (error) {
     console.error("Error al guardar pedido:", error);
     alert("Hubo un error al enviar el pedido");
@@ -398,64 +415,129 @@ productos: {
 
 function generarPDF(pedido) {
   const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
 
-  doc.text("Pedido de Medialunas", 10, 10);
-  doc.text(`Fecha: ${pedido.fechaCreacion.toDate().toLocaleString()}`, 10, 20);
+  // =========================
+  // TÍTULO
+  // =========================
+  doc.setFontSize(16);
+  doc.setTextColor(0);
+  doc.text("Pedido recibido", pageWidth / 2, y, { align: "center" });
 
-  doc.text("Cliente:", 10, 30);
-  doc.text(`Nombre: ${pedido.cliente.nombre}`, 10, 40);
-  doc.text(`Teléfono: ${pedido.cliente.telefono}`, 10, 50);
-  doc.text(`Email: ${pedido.cliente.email}`, 10, 60);
+  y += 6;
+  doc.setFontSize(11);
+  doc.setTextColor(100);
+  doc.text(
+    `Pedido Nº ${String(pedido.numeroPedido).padStart(6, "0")}`,
+    pageWidth / 2,
+    y,
+    { align: "center" }
+  );
 
-  doc.text("Productos:", 10, 75);
-  doc.text(`Medialuna bandeja: ${pedido.productos.medialunaBandeja}`, 10, y);
-  doc.text(`Surtidas bandeja: ${pedido.productos.surtidasBandeja}`, 10, y += 10);
-  doc.text(`Medialuna grasa: ${pedido.productos.medialunaGrasa}`, 10, y += 10);
-  doc.text(`Medialuna manteca: ${pedido.productos.medialunaManteca}`, 10, y += 10);
-  doc.text(`Frola membrillo: ${pedido.productos.frolaMembrillo}`, 10, y += 10);
-  doc.text(`Frola batata: ${pedido.productos.frolaBatata}`, 10, y += 10);
-  doc.text(`Ricota: ${pedido.productos.ricota}`, 10, y += 10);
-  doc.text(`Ricota c/ DDL: ${pedido.productos.ricotaDDL}`, 10, y += 10);
+  y += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(150);
+  doc.text(
+    `PDF generado el ${new Date().toLocaleString()}`,
+    pageWidth / 2,
+    y,
+    { align: "center" }
+  );
 
+  // Línea
+  y += 8;
+  doc.setDrawColor(180);
+  doc.line(15, y, pageWidth - 15, y);
 
-  doc.text(`Estado: ${pedido.estado}`, 10, 120);
+  // =========================
+  // DATOS CLIENTE
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.setTextColor(0);
+  doc.text("Datos del cliente", 15, y);
 
-  doc.save("pedido.pdf");
+  y += 8;
+  doc.setFontSize(10);
+  doc.text(`Nombre: ${pedido.cliente.nombre}`, 15, y); y += 6;
+  doc.text(`Email: ${pedido.cliente.email}`, 15, y); y += 6;
+  doc.text(`Teléfono: ${pedido.cliente.telefono}`, 15, y); y += 6;
+  doc.text(
+    `Fecha del pedido: ${pedido.fechaCreacion.toDate().toLocaleString()}`,
+    15,
+    y
+  );
+
+  // Línea
+  y += 8;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // PRODUCTOS
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.text("Productos solicitados", 15, y);
+
+  y += 8;
+  doc.setFontSize(10);
+
+  const productos = [
+    ["Medialuna por bandeja", pedido.productos.medialunaBandeja],
+    ["Surtidas por bandeja", pedido.productos.surtidasBandeja],
+    ["Medialuna de grasa", pedido.productos.medialunaGrasa],
+    ["Medialuna de manteca", pedido.productos.medialunaManteca],
+    ["Frola de membrillo", pedido.productos.frolaMembrillo],
+    ["Frola de batata", pedido.productos.frolaBatata],
+    ["Ricota", pedido.productos.ricota],
+    ["Ricota c/ dulce de leche", pedido.productos.ricotaDDL],
+  ];
+
+  productos.forEach(([nombre, cantidad]) => {
+    doc.text(`${nombre}:`, 15, y);
+    doc.text(String(cantidad), pageWidth - 20, y, { align: "right" });
+    y += 6;
+  });
+
+  // Línea
+  y += 4;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // NOTAS
+  // =========================
+  y += 10;
+  doc.setFontSize(12);
+  doc.text("Notas", 15, y);
+
+  y += 8;
+  doc.setFontSize(10);
+  doc.text(pedido.notas || "— Sin notas —", 15, y);
+
+  // Línea
+  y += 8;
+  doc.line(15, y, pageWidth - 15, y);
+
+  // =========================
+  // ESTADO
+  // =========================
+  y += 10;
+  doc.setFontSize(11);
+  doc.setTextColor(0);
+
+  const fechaEstado = pedido.estadoFecha
+    ? pedido.estadoFecha.toDate().toLocaleString()
+    : pedido.fechaCreacion.toDate().toLocaleString();
+
+  let textoEstado =
+    pedido.estado === "Pendiente"
+      ? `Estado del pedido: ${pedido.estado} (desde ${fechaEstado} hs)`
+      : `Estado del pedido: ${pedido.estado} (${fechaEstado})`;
+
+  doc.text(textoEstado, 15, y);
+
+  doc.save(`pedido-${String(pedido.numeroPedido).padStart(6, "0")}.pdf`);
 }
 
-
-
-// OJITO
-
-btnTogglePass.addEventListener("click", () => {
-  if (inputPass.type === "password") {
-    inputPass.type = "text";
-    btnTogglePass.textContent = "🙈";
-  } else {
-    inputPass.type = "password";
-    btnTogglePass.textContent = "👁️";
-  }
-});
-
-
-
-// Flechita para subir
-
-
-const btnScrollTop = document.getElementById("btnScrollTop");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    btnScrollTop.style.display = "block";
-  } else {
-    btnScrollTop.style.display = "none";
-  }
-});
-
-btnScrollTop.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-});
 

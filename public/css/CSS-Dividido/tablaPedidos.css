@@ -104,6 +104,15 @@ td {
   td {
     display: block;
     width: 100%;
+    border: none;
+  }
+
+  td {
+    display: flex;
+    border-radius: 5px;
+    border: 1px solid gray;
+    flex-direction: column;
+    margin-bottom: 1vh;
   }
 
   thead {

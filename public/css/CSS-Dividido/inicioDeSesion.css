@@ -131,7 +131,7 @@ top: 5%;
    @media screen and (max-width: 524px) {
 
 .imgMedialunas{
-  width: 40vw;
+  width: 50vw;
   margin-bottom: 4vh;
   }
 
@@ -159,10 +159,6 @@ top: 5%;
 
   .primer-section {
     margin-top: 5vh;
-  }
-
-  .imgMedialunas {
-    width: 70vw;
   }
 
   .authSection input,
