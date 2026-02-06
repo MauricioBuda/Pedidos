@@ -57,26 +57,40 @@ input {
 }
 
 
+/* BOTÓN WHATSAPP FLOTANTE */
 #btnWhatsapp {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 52px;
-  height: 52px;
+
+  width: 56px;
+  height: 56px;
+
   background-color: #25D366;
-  color: white;
-  font-size: 28px;
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  z-index: 9999;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+
   text-decoration: none;
-  z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-#btnWhatsapp:hover {
-  background-color: #1ebe5d;
+/* Imagen dentro del botón */
+#btnWhatsapp img {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+#btnWhatsapp,
+#btnWhatsapp * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -89,6 +103,13 @@ input {
 /* MOBILE ↓↓↓*/
 
 @media screen and (max-width: 768px) {
+
+
+  #btnWhatsapp {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  }
 
   body {
     padding: 10px;
