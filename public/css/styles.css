@@ -24,6 +24,7 @@ button {
   background-color: white;
   border-radius: 5px;
   padding: 5px;
+  cursor: pointer;
 }
 
 input {
@@ -36,12 +37,17 @@ input {
 
 /* INICIO DE INICIO DE SESION */
 
+.imgMedialunas{
+  width: 10vw;
+  margin-bottom: 5vh;
+}
+
 .primer-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 150px;
+  margin-top: 90px;
 }
 
 
@@ -59,7 +65,7 @@ input {
 
 .userInfo {
 position: absolute;
-right: 75%;
+right: 70%;
 top: 5%;
 }
 
@@ -87,7 +93,7 @@ top: 5%;
 }
 
 .inputPass{
-  width: 100%;
+  width: 103%;
   padding-right: 40px;
 }
 
@@ -124,9 +130,11 @@ top: 5%;
 
 .btnRegister {
   border: none;
+  font-weight: bold;
 }
 
 .btnResetPass {
+  font-weight: bold;
   border: none;
   color: blue;
   background-color: white;
@@ -139,6 +147,14 @@ top: 5%;
 
 
 /* INICIO FORMULARIO */
+
+.h1-pedido {
+  margin-bottom: 5vh;
+}
+
+.h3-formulario {
+  margin-top: 4vh;
+}
 
 .formularioCliente {
   display: flex;
@@ -155,10 +171,47 @@ min-width: 30vw;
 }
 
 .btnEnviarPedido{
-  max-width: 5vw;
+  max-width: 12vw;
+  margin: 5vh 0 12vh 0;
+  padding: 12px;
+  background-color: rgba(0, 128, 0, 0.867);
+  border: none;
+  font-weight: bold;
+  color: white;
+  font-size: 1.2vw;
 }
 
-/* INICIO FORMULARIO */
+
+.producto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 30vw;
+}
+
+.producto label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.producto input {
+  width: 100%;
+}
+
+#notas {
+  min-width: 30vw;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 2vh;
+}
+
+.elegirFechaHora{
+  min-width: 10vw!important;
+  margin-top: 1vh;
+}
+
+/* FIN FORMULARIO */
 
 
 
@@ -192,6 +245,21 @@ min-width: 30vw;
 
 .filtroPorCLiente {
   display: flex;
+  position: relative;
+}
+
+#sugerenciasClientes {
+  top: 100%;
+  margin-top: 4px;
+}
+
+#busquedaCliente {
+  width: 180px;
+}
+
+#filtroEstado {
+  width: 150px;
+  height: 25px;
 }
 
 /* FIN DE SECCION ADMIN */
@@ -224,11 +292,11 @@ td {
 /* COLORES POR ESTADO DE PEDIDO */
 
 .estado-pendiente {
-  background-color: rgb(199, 199, 199);
+  background-color: rgba(255, 255, 0, 0.553);
 }
 
 .estado-pendiente td {
-  border: 2px solid rgb(105, 105, 105);
+  border: 3px solid gray;
 }
 
 .estado-entregado {
@@ -236,15 +304,15 @@ td {
 }
 
 .estado-entregado td {
-  border: 2px solid #516852;
+  border: 3px solid rgba(0, 128, 0, 0.694);
 }
 
 .estado-cancelado {
-  background-color: #f8d7da;
+  background-color: rgb(253, 97, 97);
 }
 
 .estado-cancelado td {
-  border: 2px solid red;
+  border: 3px solid red;
 }
 
 

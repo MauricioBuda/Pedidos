@@ -45,6 +45,8 @@ const seccionCliente = document.getElementById("seccionCliente");
 
 const form = document.getElementById("pedidoForm");
 
+const imgMedialunas = document.getElementById("imgMedialunas");
+
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 const btnGoogle = document.getElementById("btnGoogle");
@@ -205,7 +207,7 @@ async function cargarPedidosUsuario(uid) {
       </td>
 
       <td>
-        <button>PDF</button>
+        <button data-pdf  class="btnPDF">  Descargar PDF  </button> ⬇️ 
       </td>
     `;
 
@@ -227,6 +229,7 @@ async function cargarPedidosUsuario(uid) {
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     authSection.style.display = "flex";
+    imgMedialunas.style.display = "block";
     seccionCliente.style.display = "none";
     seccionAdmin.style.display = "none";
     btnLogout.style.display = "none";
@@ -237,6 +240,7 @@ onAuthStateChanged(auth, async (user) => {
   // Usuario autenticado
   authSection.style.display = "none";
   h2ingresar.style.display = "none";
+  imgMedialunas.style.display = "none";
   btnLogout.style.display = "inline";
   userInfo.style.display = "block";
   userEmail.textContent = user.email;
@@ -264,11 +268,49 @@ onAuthStateChanged(auth, async (user) => {
 
 
 
+// ================================
+// Validacion fecha y hora
+// ================================
 
+function configurarFechaMinima() {
+  const hoy = new Date();
+  const yyyy = hoy.getFullYear();
+  const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+  const dd = String(hoy.getDate()).padStart(2, "0");
 
+  const fechaHoy = `${yyyy}-${mm}-${dd}`;
 
+  const inputFecha = document.getElementById("fechaEntrega");
+  inputFecha.min = fechaHoy;
+}
 
+configurarFechaMinima();
 
+function configurarHoraMinima() {
+  const inputFecha = document.getElementById("fechaEntrega");
+  const inputHora = document.getElementById("horaEntrega");
+
+  inputFecha.addEventListener("change", () => {
+    const hoy = new Date();
+    const fechaSeleccionada = new Date(inputFecha.value + "T00:00");
+
+    // Si es hoy, bloquear horas pasadas
+    if (
+      fechaSeleccionada.getFullYear() === hoy.getFullYear() &&
+      fechaSeleccionada.getMonth() === hoy.getMonth() &&
+      fechaSeleccionada.getDate() === hoy.getDate()
+    ) {
+      const hh = String(hoy.getHours()).padStart(2, "0");
+      const mm = String(hoy.getMinutes()).padStart(2, "0");
+      inputHora.min = `${hh}:${mm}`;
+    } else {
+      // Si es otro día, liberar horas
+      inputHora.min = "00:00";
+    }
+  });
+}
+
+configurarHoraMinima();
 
 
 

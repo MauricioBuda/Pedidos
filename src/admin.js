@@ -42,11 +42,47 @@ filtroEstado.addEventListener("change", () => {
 });
 
 busquedaCliente.addEventListener("input", () => {
-  if (busquedaCliente.value === "") {
+  const texto = busquedaCliente.value.trim();
+
+  if (texto === "") {
     filtroClienteActivo = null;
+    sugerenciasClientes.style.display = "none";
+    actualizarIndicadorFiltroCliente();
+    cargarPedidos();
+    return;
   }
+
   cargarPedidos();
 });
+
+
+
+busquedaCliente.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    busquedaCliente.value = "";
+    filtroClienteActivo = null;
+    sugerenciasClientes.style.display = "none";
+    actualizarIndicadorFiltroCliente();
+    cargarPedidos();
+  }
+});
+
+
+
+
+document.addEventListener("click", (e) => {
+  if (
+    !busquedaCliente.contains(e.target) &&
+    !sugerenciasClientes.contains(e.target)
+  ) {
+    sugerenciasClientes.style.display = "none";
+  }
+});
+
+
+
+
+
 
 btnLimpiarFiltroCliente.addEventListener("click", () => {
   filtroClienteActivo = null;
@@ -159,7 +195,7 @@ async function cargarPedidos() {
         </small>
       </td>
       <td>${botonesEstado}</td>
-      <td>  <button data-pdf  class="btnPDF">  Descargar PDF  </button> 📥 </td>
+      <td>  <button data-pdf  class="btnPDF">  Descargar PDF  </button> ⬇️ </td>
     `;
 
     tr.querySelectorAll("[data-accion]").forEach(btn => {

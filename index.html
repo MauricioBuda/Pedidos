@@ -12,7 +12,7 @@
 <section class="primer-section">
 
 
-
+<img class="imgMedialunas" id="imgMedialunas" src="./public/img/Medialunas.jpg" alt="Medialunas">
 
   <h2 class="h2-ingresar" id="h2-ingresar"> Ingresar </h2>
 
@@ -55,7 +55,7 @@
 
 <div class="seccionCliente" id="seccionCliente"  style="display:none;">
 
-  <h1> Realizar nuevo pedido </h1>
+  <h1 class="h1-pedido"> Realizar nuevo pedido </h1>
 
   <form class="formularioCliente" id="pedidoForm">
 
@@ -64,23 +64,56 @@
     <input type="tel" id="telefono" placeholder="Teléfono" required />
     <input type="email" id="email" placeholder="Email" required />
 
-    <h3> Pedido (ingresar cantidad) </h3>
+    <h3 class="h3-formulario"> Pedido (ingresar cantidad) </h3>
 
-    <input type="number" id="medialunaBandeja" placeholder="Medialuna por bandeja" min="0" />
-    <input type="number" id="surtidasBandeja" placeholder="Surtidas por bandeja" min="0" />
-    <input type="number" id="medialunaGrasa" placeholder="Medialunas de grasa" min="0" />
-    <input type="number" id="medialunaManteca" placeholder="Medialunas de manteca" min="0" />
-    <input type="number" id="frolaMembrillo" placeholder="Frola de membrillo" min="0" />
-    <input type="number" id="frolaBatata" placeholder="Frola de batata" min="0" />
-    <input type="number" id="ricota" placeholder="Ricota" min="0" />
-    <input type="number" id="ricotaDDL" placeholder="Ricota con dulce de leche" min="0" />
+
+<div class="producto">
+  <label for="medialunaBandeja">Medialuna por bandeja</label>
+  <input type="number" id="medialunaBandeja" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="surtidasBandeja">Surtidas por bandeja</label>
+  <input type="number" id="surtidasBandeja" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="medialunaGrasa">Medialunas de grasa</label>
+  <input type="number" id="medialunaGrasa" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="medialunaManteca">Medialunas de manteca</label>
+  <input type="number" id="medialunaManteca" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="frolaMembrillo">Frola de membrillo</label>
+  <input type="number" id="frolaMembrillo" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="frolaBatata">Frola de batata</label>
+  <input type="number" id="frolaBatata" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="ricota">Ricota</label>
+  <input type="number" id="ricota" min="0" placeholder="0" />
+</div>
+
+<div class="producto">
+  <label for="ricotaDDL">Ricota con dulce de leche</label>
+  <input type="number" id="ricotaDDL" min="0" placeholder="0" />
+</div>
+
 
 
     <textarea id="notas" placeholder="Notas adicionales"></textarea>
 
-    <h3> Fecha solicitada de entrega </h3>
-    <input type="date" id="fechaEntrega" required />
-    <input type="time" id="horaEntrega" required />
+    <h3 class="h3-formulario"> Fecha solicitada de entrega </h3>
+    <input class="elegirFechaHora" type="date" id="fechaEntrega" required />
+    <input class="elegirFechaHora" type="time" id="horaEntrega" required />
 
     <button class="btnEnviarPedido" type="submit"> Enviar pedido </button>
 
@@ -174,7 +207,7 @@
           margin:0;
           max-height:150px;
           overflow-y:auto;
-          width:300px;
+          width: 400px;
           z-index:10;
         "
       ></ul>
