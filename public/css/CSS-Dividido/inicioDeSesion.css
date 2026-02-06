@@ -40,12 +40,12 @@ top: 5%;
 }
 
 .authSection{
+  display: flex;
   flex-direction: column;
   gap: 2vh;
 }
 
 .authSection input, .authSection button{
-  min-width: 300px;
   text-align: center;
   border-radius: 5px;
   padding: 8px;
@@ -57,7 +57,7 @@ top: 5%;
 }
 
 .inputPass{
-  width: 103%;
+  width: 100%;
   padding-right: 40px;
 }
 
@@ -139,16 +139,23 @@ top: 5%;
   width: 5vw;
 }
 
-}
 
 
+  .authSection {
+    width: 100%;
+    align-items: center;
+  }
 
+  .authSection > input,
+  .authSection > button,
+  .div-inputPass {
+    width: 90vw;
+  }
 
+  .inputPass {
+    width: 100%;
+  }
 
-/* MOBILE ↓↓↓*/
-
-
-@media screen and (max-width: 768px) {
 
   .primer-section {
     margin-top: 5vh;

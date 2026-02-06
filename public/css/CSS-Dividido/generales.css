@@ -32,6 +32,54 @@ button {
 input {
   padding: 3px;
 }
+
+
+#btnScrollTop {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff40;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#btnScrollTop:hover {
+  background-color: #555555cb;
+}
+
+
+#btnWhatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 52px;
+  height: 52px;
+  background-color: #25D366;
+  color: white;
+  font-size: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#btnWhatsapp:hover {
+  background-color: #1ebe5d;
+}
+
+
 /* FIN DE GENERALES */
 
 

@@ -437,3 +437,25 @@ btnTogglePass.addEventListener("click", () => {
   }
 });
 
+
+
+// Flechita para subir
+
+
+const btnScrollTop = document.getElementById("btnScrollTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    btnScrollTop.style.display = "block";
+  } else {
+    btnScrollTop.style.display = "none";
+  }
+});
+
+btnScrollTop.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
