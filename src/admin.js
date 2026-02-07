@@ -10,6 +10,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  orderBy,
   runTransaction
 } from "firebase/firestore";
 
@@ -114,11 +115,7 @@ async function cargarPedidos() {
   loadingAdmin.style.display = "none";
 
   if (snapshot.empty) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7">No hay pedidos</td>
-      </tr>
-    `;
+    tbody.innerHTML = `<tr><td colspan="8">No hay pedidos</td></tr>`;
     actualizarContadorPedidos();
     return;
   }
@@ -128,37 +125,16 @@ async function cargarPedidos() {
     pedidosCache.push({ id: docSnap.id, ...docSnap.data() });
   });
 
-  let hayResultados = false;
-  const sugerenciasMap = new Map();
+  tbody.innerHTML = "";
 
   pedidosCache.forEach((pedido) => {
-    const nombre = pedido.cliente?.nombre?.trim();
-    const email = pedido.cliente?.email?.trim();
 
-    if (nombre) {
-      sugerenciasMap.set(`nombre:${nombre}`, { tipo: "nombre", valor: nombre });
-    }
-    if (email) {
-      sugerenciasMap.set(`email:${email}`, { tipo: "email", valor: email });
-    }
+    if (estadoSeleccionado !== "todos" && pedido.estado !== estadoSeleccionado) return;
 
-    // ===== FILTRO POR ESTADO =====
-    if (estadoSeleccionado !== "todos" && pedido.estado !== estadoSeleccionado) {
-      return;
-    }
+    const nombre = pedido.cliente?.nombre?.toLowerCase() || "";
+    const email = pedido.cliente?.email?.toLowerCase() || "";
 
-    // ===== FILTRO POR CLIENTE =====
-    if (filtroActivo) {
-      const matchNombre = nombre?.toLowerCase().includes(filtroActivo);
-      const matchEmail = email?.toLowerCase().includes(filtroActivo);
-      if (!matchNombre && !matchEmail) return;
-    } else if (textoBusqueda) {
-      const matchNombre = nombre?.toLowerCase().includes(textoBusqueda);
-      const matchEmail = email?.toLowerCase().includes(textoBusqueda);
-      if (!matchNombre && !matchEmail) return;
-    }
-
-    hayResultados = true;
+    if (textoBusqueda && !nombre.includes(textoBusqueda) && !email.includes(textoBusqueda)) return;
 
     const estados = ["Pendiente", "Entregado", "Cancelado"];
     const botonesEstado = estados
@@ -167,46 +143,43 @@ async function cargarPedidos() {
       .join("");
 
     const tr = document.createElement("tr");
-
     tr.classList.add(`estado-${pedido.estado.toLowerCase()}`);
 
+    tr.innerHTML = `
+      <td><strong>#${String(pedido.numeroPedido).padStart(6, "0")}</strong></td>
+      <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
+      <td>
+        ${pedido.cliente.nombre}<br>
+        <small>${pedido.cliente.email}</small>
+      </td>
+      <td>
+        Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
+        Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
+        Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
+        Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
+        Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
+        Frola batata: ${pedido.productos.frolaBatata}<br>
+        Ricota: ${pedido.productos.ricota}<br>
+        Ricota c/ DDL: ${pedido.productos.ricotaDDL}
+      </td>
+      <td>${pedido.notas || "<em>—</em>"}</td>
+      <td>
+        ${pedido.estado}<br>
+        <small>
+          (${pedido.estadoFecha
+            ? pedido.estadoFecha.toDate().toLocaleString()
+            : pedido.fechaCreacion.toDate().toLocaleString()})
+        </small>
+      </td>
 
-tr.innerHTML = `
-  <td><strong>#${String(pedido.numeroPedido).padStart(6, "0")}</strong></td>
-  <td>${pedido.fechaCreacion.toDate().toLocaleString()}</td>
-  <td>
-    ${pedido.cliente.nombre}<br>
-    <small>${pedido.cliente.email}</small>
-  </td>
-  <td>
-    Medialuna bandeja: ${pedido.productos.medialunaBandeja}<br>
-    Surtidas bandeja: ${pedido.productos.surtidasBandeja}<br>
-    Medialuna grasa: ${pedido.productos.medialunaGrasa}<br>
-    Medialuna manteca: ${pedido.productos.medialunaManteca}<br>
-    Frola membrillo: ${pedido.productos.frolaMembrillo}<br>
-    Frola batata: ${pedido.productos.frolaBatata}<br>
-    Ricota: ${pedido.productos.ricota}<br>
-    Ricota c/ DDL: ${pedido.productos.ricotaDDL}
-  </td>
-  <td>${pedido.notas || "<em>—</em>"}</td>
-  <td>
-    ${pedido.estado}<br>
-    <small>
-      (${pedido.estadoFecha
-        ? pedido.estadoFecha.toDate().toLocaleString()
-        : pedido.fechaCreacion.toDate().toLocaleString()})
-    </small>
-  </td>
-  <td>${botonesEstado}</td>
-  <td>
-    <button class="btnPDF">Descargar PDF</button>
-  </td>
-`;
-
+      <td>${botonesEstado}</td>
+      <td><button class="btnPDF">Descargar PDF</button></td>
+    `;
 
     tr.querySelectorAll("[data-accion]").forEach(btn => {
       btn.addEventListener("click", async () => {
-        await updateDoc(doc(db, "pedidos", pedido.id), {
+        await setDoc(doc(db, "pedidos", pedido.id), {
+          ...pedido,
           estado: btn.dataset.accion,
           estadoFecha: new Date()
         });
@@ -214,25 +187,16 @@ tr.innerHTML = `
       });
     });
 
-    tr.querySelector("[data-pdf]").addEventListener("click", () => {
+    tr.querySelector(".btnPDF").addEventListener("click", () => {
       generarPDF(pedido);
     });
 
     tbody.appendChild(tr);
   });
 
-  if (!hayResultados) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7">No hay pedidos que coincidan</td>
-      </tr>
-    `;
-  }
-
-  mostrarSugerencias([...sugerenciasMap.values()], textoBusqueda);
-  actualizarIndicadorFiltroCliente();
   actualizarContadorPedidos();
 }
+
 
 // ================================
 // SUGERENCIAS
