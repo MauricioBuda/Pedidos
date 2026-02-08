@@ -22,6 +22,10 @@
   align-items: center;
 }
 
+  .filtroBusquedaCliente{
+    padding-right: 5px;
+  }
+
 
 #filtroClienteActivoBox {
   text-align: center;
@@ -80,6 +84,8 @@ min-width: 90%
     font-size: 1rem;
     padding: 10px;
   }
+
+
 
   #sugerenciasClientes {
     width: 100%;

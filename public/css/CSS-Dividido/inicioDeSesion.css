@@ -116,6 +116,15 @@ top: 5%;
   background-color: white;
 }
 
+#hrMobileUser {
+  display: none;
+  border: none;
+  height: 1px;
+  background: #ccc;
+  margin: 12px 0;
+}
+
+
 /* FIN DE INICIO DE SESION */
 
 
@@ -194,5 +203,15 @@ top: 5%;
     text-align: center;
     margin-bottom: 10px;
   }
+
+
+#hrMobileUser {
+  display: block;
+  width: 90%;
+  margin: 12px auto 20px auto;
+}
+
+
+
 
 }
