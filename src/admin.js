@@ -98,6 +98,12 @@ btnLimpiarFiltroCliente.addEventListener("click", () => {
 // ================================
 // CARGAR PEDIDOS
 // ================================
+
+
+
+
+
+
 async function cargarPedidos() {
   tbody.innerHTML = "";
   loadingAdmin.style.display = "block";
@@ -117,6 +123,7 @@ async function cargarPedidos() {
   if (snapshot.empty) {
     tbody.innerHTML = `<tr><td colspan="8">No hay pedidos</td></tr>`;
     actualizarContadorPedidos();
+    sugerenciasClientes.style.display = "none";
     return;
   }
 
@@ -127,14 +134,46 @@ async function cargarPedidos() {
 
   tbody.innerHTML = "";
 
+  const sugerenciasMap = new Map();
+  let hayResultados = false;
+
   pedidosCache.forEach((pedido) => {
 
-    if (estadoSeleccionado !== "todos" && pedido.estado !== estadoSeleccionado) return;
+    const nombre = pedido.cliente?.nombre?.trim();
+    const email = pedido.cliente?.email?.trim();
 
-    const nombre = pedido.cliente?.nombre?.toLowerCase() || "";
-    const email = pedido.cliente?.email?.toLowerCase() || "";
+    // 🔹 ARMAR SUGERENCIAS
+    if (nombre) {
+      sugerenciasMap.set(`nombre:${nombre}`, {
+        tipo: "nombre",
+        valor: nombre
+      });
+    }
 
-    if (textoBusqueda && !nombre.includes(textoBusqueda) && !email.includes(textoBusqueda)) return;
+    if (email) {
+      sugerenciasMap.set(`email:${email}`, {
+        tipo: "email",
+        valor: email
+      });
+    }
+
+    // 🔹 FILTRO POR ESTADO
+    if (estadoSeleccionado !== "todos" && pedido.estado !== estadoSeleccionado) {
+      return;
+    }
+
+    // 🔹 FILTRO POR CLIENTE
+    if (filtroActivo) {
+      const matchNombre = nombre?.toLowerCase().includes(filtroActivo);
+      const matchEmail = email?.toLowerCase().includes(filtroActivo);
+      if (!matchNombre && !matchEmail) return;
+    } else if (textoBusqueda) {
+      const matchNombre = nombre?.toLowerCase().includes(textoBusqueda);
+      const matchEmail = email?.toLowerCase().includes(textoBusqueda);
+      if (!matchNombre && !matchEmail) return;
+    }
+
+    hayResultados = true;
 
     const estados = ["Pendiente", "Entregado", "Cancelado"];
     const botonesEstado = estados
@@ -171,7 +210,6 @@ async function cargarPedidos() {
             : pedido.fechaCreacion.toDate().toLocaleString()})
         </small>
       </td>
-
       <td>${botonesEstado}</td>
       <td><button class="btnPDF">Descargar PDF</button></td>
     `;
@@ -194,8 +232,20 @@ async function cargarPedidos() {
     tbody.appendChild(tr);
   });
 
+  if (!hayResultados) {
+    tbody.innerHTML = `<tr><td colspan="8">No hay pedidos que coincidan</td></tr>`;
+  }
+
+  // 🔹 MOSTRAR SUGERENCIAS
+  mostrarSugerencias([...sugerenciasMap.values()], textoBusqueda);
+
+  actualizarIndicadorFiltroCliente();
   actualizarContadorPedidos();
 }
+
+
+
+
 
 
 // ================================
@@ -385,9 +435,16 @@ function generarPDF(pedido) {
 // UI AUX
 // ================================
 function actualizarContadorPedidos() {
-  const filas = tbody.querySelectorAll("tr");
-  contadorPedidosNumero.textContent = filas.length;
+  const filasPedidos = tbody.querySelectorAll(
+    "tr.estado-pendiente, tr.estado-entregado, tr.estado-cancelado"
+  );
+  contadorPedidosNumero.textContent = filasPedidos.length;
 }
+
+
+
+
+
 
 function actualizarIndicadorFiltroCliente() {
   if (filtroClienteActivo) {

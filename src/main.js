@@ -61,8 +61,11 @@ const btnResetPass = document.getElementById("btnResetPass");
 
 const h2ingresar = document.getElementById("h2-ingresar");
 
+const primerSection = document.getElementById("primer-section");
+
 const btnTogglePass = document.getElementById("btnTogglePass");
 const inputPass = document.getElementById("loginPass");
+
 
 const loadingPedidos = document.getElementById("loadingPedidos");
 
@@ -226,11 +229,13 @@ tr.innerHTML = `
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     authSection.style.display = "flex";
-    imgMedialunas.style.display = "block";
+    imgMedialunas.style.display = "flex";
     seccionCliente.style.display = "none";
     seccionAdmin.style.display = "none";
     btnLogout.style.display = "none";
     userInfo.style.display = "none";
+
+    primerSection.style.flexDirection = "column";
     return;
   }
 
@@ -241,6 +246,8 @@ onAuthStateChanged(auth, async (user) => {
   btnLogout.style.display = "inline";
   userInfo.style.display = "block";
   userEmail.textContent = user.email;
+
+  primerSection.style.flexDirection = "row-reverse";
 
   await crearPerfilUsuario(user);
 
@@ -539,5 +546,22 @@ function generarPDF(pedido) {
 
   doc.save(`pedido-${String(pedido.numeroPedido).padStart(6, "0")}.pdf`);
 }
+
+
+
+
+
+
+// OJITO
+
+btnTogglePass.addEventListener("click", () => {
+  if (inputPass.type === "password") {
+    inputPass.type = "text";
+    btnTogglePass.textContent = "🙈";
+  } else {
+    inputPass.type = "password";
+    btnTogglePass.textContent = "👁️";
+  }
+});
 
 

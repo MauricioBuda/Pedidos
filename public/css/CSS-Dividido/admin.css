@@ -22,6 +22,16 @@
   align-items: center;
 }
 
+
+#filtroClienteActivoBox {
+  text-align: center;
+  gap: 10vh;
+}
+
+#btnLimpiarFiltroCliente {
+  margin-top: 1vh;
+}
+
 /* FIN DE SECCION ADMIN */
 
 

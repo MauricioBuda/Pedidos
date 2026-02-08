@@ -93,6 +93,10 @@ input {
   padding: 0;
 }
 
+  td button {
+    margin: 10px;
+}
+
 
 /* FIN DE GENERALES */
 
@@ -149,9 +153,8 @@ input {
   }
 
   td button {
-    margin: 0;
-  
-
+    margin: 1vw auto;
+    width: 90%;
 }
 
 

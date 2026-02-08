@@ -9,14 +9,14 @@
 <body>
 
 
-<section class="primer-section">
+<section id="primer-section" class="primer-section">
 
 
 <img class="imgMedialunas" id="imgMedialunas" src="./public/img/LogoMedialunas.png" alt="Medialunas">
 
   <h2 class="h2-ingresar" id="h2-ingresar"> Ingresar </h2>
 
-  <button class="btnLogout" id="btnLogout" style="display:none;"> 👋 Cerrar sesión </button>
+  <button class="btnLogout" id="btnLogout" style="display:none;"> <img class="imgLogout" src="./public/img/logout.png" alt="exit"> </button>
 
 
 
@@ -168,15 +168,15 @@
 
 <section class="seccionAdmin">
 
-  <h1 class="h1-admin"> 🛠️ Panel de Administrador 🛠️ </h1>
+  <h1 class="h1-admin"> Panel de Administrador 🛠️ </h1>
 
 
-  <h2 class="h2-pedidos"> 📋 Pedidos 📋 </h2>
+  <h2 class="h2-pedidos"> Pedidos 📋 </h2>
 
   <div class="divFiltros">
 
     <div style="margin-bottom:10px;">
-      <label for="filtroEstado">Filtrar por estado 🔎:</label>
+      <label for="filtroEstado">Filtrar por estado:</label>
       <select id="filtroEstado">
         <option value="todos">Todos</option>
         <option value="Pendiente"> Pendiente </option>
@@ -189,7 +189,7 @@
 
 
     <div class="filtroPorCLiente" style="margin-bottom:10px; position:relative;">
-      <label for="busquedaCliente"> Filtrar por cliente 🧑: </label><br>
+      <label for="busquedaCliente"> Filtrar por cliente: </label><br>
       <input
         type="text"
         id="busquedaCliente"

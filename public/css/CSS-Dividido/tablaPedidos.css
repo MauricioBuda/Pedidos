@@ -12,6 +12,8 @@ td {
 .btnPDF {
   background-color: white;
   padding: 5px;
+  width: 90%;
+  margin: auto;
 }
 
 .btnPDF:hover {
@@ -172,7 +174,7 @@ td {
   #adminPedidosBody td:nth-of-type(4)::before { content: "🧺 Productos"; }
   #adminPedidosBody td:nth-of-type(5)::before { content: "📝 Notas"; }
   #adminPedidosBody td:nth-of-type(6)::before { content: "📌 Estado"; }
-  #adminPedidosBody td:nth-of-type(7)::before { content: "⚙️ Cambiar estado"; }
+  #adminPedidosBody td:nth-of-type(7)::before { content: "⚙️ Cambiar estado a ..."; }
   #adminPedidosBody td:nth-of-type(8)::before { content: "📄 PDF"; }
 
   /* CONTENIDO */
@@ -185,54 +187,37 @@ td {
     line-height: 1.45;
   }
 
-  /* BOTONES */
-  td:nth-of-type(6),
-  td:nth-of-type(7) {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  /* ===== BOTONES - CLIENTE ===== */
+#tablaPedidos td:nth-of-type(6) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  td button {
-    width: 90%;
-    box-sizing: border-box;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin: 0 auto;
-  }
+/* ===== BOTONES - ADMIN ===== */
+#adminPedidosBody td:nth-of-type(7),
+#adminPedidosBody td:nth-of-type(8) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  .btnPDF {
-    background: white;
-    border: 2px solid #333;
-    position: relative;
-  }
+/* ===== PDF CLIENTE ===== */
+#tablaPedidos td:nth-of-type(6) {
+  font-size: 0;
+}
 
-.btnPDF {
-    position: relative;
-    color: transparent; /* oculta texto original + icono */
-  }
+#tablaPedidos td:nth-of-type(6) .btnPDF {
+  font-size: 0.95rem;
+}
 
-  .btnPDF::before {
-    content: "Descargar PDF";
-    color: #000;
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-  }
+/* ===== PDF ADMIN ===== */
+#adminPedidosBody td:nth-of-type(8) {
+  font-size: 0;
+}
 
-    /* Oculta texto suelto (⬇️) dentro de la celda PDF */
-  td:nth-of-type(7) {
-    font-size: 0;
-  }
-
-  /* Restaura texto del botón */
-  td:nth-of-type(7) .btnPDF {
-    font-size: 0.95rem;
-  }
+#adminPedidosBody td:nth-of-type(8) .btnPDF {
+  font-size: 0.95rem;
+}
 
 }
