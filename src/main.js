@@ -56,6 +56,7 @@ const btnLogout = document.getElementById("btnLogout");
 
 const userInfo = document.getElementById("userInfo");
 const userEmail = document.getElementById("userEmail");
+const hrMobileUser = document.getElementById("hrMobileUser");
 
 const btnResetPass = document.getElementById("btnResetPass");
 
@@ -234,6 +235,7 @@ onAuthStateChanged(auth, async (user) => {
     seccionAdmin.style.display = "none";
     btnLogout.style.display = "none";
     userInfo.style.display = "none";
+    hrMobileUser.style.display = "none";
 
     primerSection.style.flexDirection = "column";
     return;
@@ -245,6 +247,7 @@ onAuthStateChanged(auth, async (user) => {
   imgMedialunas.style.display = "none";
   btnLogout.style.display = "inline";
   userInfo.style.display = "block";
+  hrMobileUser.style.display = "block";
   userEmail.textContent = user.email;
 
   primerSection.style.flexDirection = "row-reverse";
@@ -562,6 +565,29 @@ btnTogglePass.addEventListener("click", () => {
     inputPass.type = "password";
     btnTogglePass.textContent = "👁️";
   }
+});
+
+
+
+
+
+// FLECHITA
+
+const btnScrollTop = document.getElementById("btnScrollTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    btnScrollTop.style.display = "block";
+  } else {
+    btnScrollTop.style.display = "none";
+  }
+});
+
+btnScrollTop.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 });
 
 

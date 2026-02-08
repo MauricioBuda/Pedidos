@@ -34,27 +34,7 @@ input {
 }
 
 
-#btnScrollTop {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ffffff40;
-  color: rgb(255, 255, 255);
-  border: none;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
-  cursor: pointer;
-  display: none;
-  z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
 
-#btnScrollTop:hover {
-  background-color: #555555cb;
-}
 
 
 /* BOTÓN WHATSAPP FLOTANTE */
@@ -98,6 +78,45 @@ input {
 }
 
 
+/* #btnScrollTop {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  background-color: #000;
+  color: #fff;
+
+  border: none;
+  cursor: pointer;
+
+  display: none;
+
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+}
+
+#btnScrollTop:hover {
+  background-color: #111;
+} */
+
+
+
+
+
 /* FIN DE GENERALES */
 
 
@@ -114,6 +133,10 @@ input {
   bottom: 60px;
   right: 20px;
   }
+
+/* #btnScrollTop {
+ bottom: 60px;
+} */
 
   body {
     padding: 10px;
