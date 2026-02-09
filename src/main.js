@@ -401,6 +401,22 @@ form.addEventListener("submit", async (e) => {
   const fechaEntrega = document.getElementById("fechaEntrega").value;
   const horaEntrega = document.getElementById("horaEntrega").value;
 
+    const totalProductos =
+    medialunaBandeja +
+    surtidasBandeja +
+    medialunaGrasa +
+    medialunaManteca +
+    frolaMembrillo +
+    frolaBatata +
+    ricota +
+    ricotaDDL;
+
+  if (totalProductos === 0) {
+    alert("Tenés que agregar al menos un producto al pedido 🧺");
+    return;
+  }
+
+
   if (!nombre || !telefono || !emailCliente || !fechaEntrega || !horaEntrega) {
     alert("Completá todos los datos obligatorios");
     return;
