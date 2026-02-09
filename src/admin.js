@@ -17,6 +17,40 @@ import {
 import jsPDF from "jspdf";
 
 
+
+
+// LOADING ESTADO
+
+function mostrarLoadingEstado() {
+  Swal.fire({
+    title: "Actualizando estado...",
+    text: "Por favor esperá",
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+}
+
+function mostrarExitoEstado() {
+  Swal.fire({
+    icon: "success",
+    title: "Estado actualizado",
+    timer: 1200,
+    showConfirmButton: false
+  });
+}
+
+function mostrarErrorEstado() {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: "No se pudo actualizar el estado del pedido"
+  });
+}
+
+
+
 // ================================
 // ESTADO
 // ================================
@@ -221,16 +255,32 @@ async function cargarPedidos() {
       <td><button class="btnPDF">Descargar PDF</button></td>
     `;
 
-    tr.querySelectorAll("[data-accion]").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        await setDoc(doc(db, "pedidos", pedido.id), {
-          ...pedido,
-          estado: btn.dataset.accion,
-          estadoFecha: new Date()
-        });
-        cargarPedidos();
+tr.querySelectorAll("[data-accion]").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    try {
+      mostrarLoadingEstado();
+
+      // Deshabilitar botones mientras guarda
+      tr.querySelectorAll("button").forEach(b => b.disabled = true);
+
+      await setDoc(doc(db, "pedidos", pedido.id), {
+        ...pedido,
+        estado: btn.dataset.accion,
+        estadoFecha: new Date()
       });
-    });
+
+      Swal.close();
+      mostrarExitoEstado();
+
+      await cargarPedidos();
+    } catch (error) {
+      console.error(error);
+      Swal.close();
+      mostrarErrorEstado();
+    }
+  });
+});
+
 
     tr.querySelector(".btnPDF").addEventListener("click", () => {
       generarPDF(pedido);
