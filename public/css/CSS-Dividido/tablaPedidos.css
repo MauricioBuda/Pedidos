@@ -67,7 +67,7 @@ td {
 }
 
 #filtroEstado {
-  width: 150px;
+  width: 39%;
   height: 25px;
 }
 
@@ -83,10 +83,10 @@ td {
 @media screen and (max-width: 768px) {
 
     #busquedaCliente {
-    height: 32px;
+    height: 25px;
     padding: 4px 8px;
     font-size: 0.9rem;
-    width:53%;
+    width:55%;
     box-sizing: border-box;
   }
 
@@ -95,7 +95,7 @@ td {
   }
 
   #busquedaCliente::placeholder {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #777;
   }
 
