@@ -19,6 +19,40 @@ import {
 
 
 // ================================
+// SWEETALERT HELPERS
+// ================================
+
+function mostrarError(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: "Ups...",
+    text: mensaje,
+    confirmButtonColor: "#d33"
+  });
+}
+
+function mostrarExito(mensaje) {
+  Swal.fire({
+    icon: "success",
+    title: "Listo 🎉",
+    text: mensaje,
+    confirmButtonColor: "#3085d6"
+  });
+}
+
+function mostrarInfo(mensaje) {
+  Swal.fire({
+    icon: "info",
+    text: mensaje,
+    confirmButtonColor: "#3085d6"
+  });
+}
+
+
+
+
+
+// ================================
 // REFERENCIAS AL DOM
 // ================================
 
@@ -89,13 +123,13 @@ btnRegister.addEventListener("click", async () => {
   const pass = document.getElementById("loginPass").value.trim();
 
   if (!email || !pass) {
-    alert("Completá email y contraseña");
+    mostrarInfo("Completá email y contraseña");
     return;
   }
 
   try {
     await createUserWithEmailAndPassword(auth, email, pass);
-    alert("Usuario registrado correctamente");
+    mostrarExito("Usuario registrado correctamente");
   } catch (error) {
     console.error(error);
     alert(error.message);
@@ -107,7 +141,7 @@ btnLogin.addEventListener("click", async () => {
   const pass = document.getElementById("loginPass").value.trim();
 
   if (!email || !pass) {
-    alert("Completá email y contraseña");
+    mostrarInfo("Completá email y contraseña");
     return;
   }
 
@@ -141,16 +175,16 @@ btnResetPass.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
 
   if (!email) {
-    alert("Ingresá tu email en la casilla de arriba de todo, para restablecer la clave");
+    mostrarInfo("Ingresá tu email en la casilla de arriba de todo, y luego tocá este botón");
     return;
   }
 
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("Te enviamos un email para restablecer tu clave, puede tardar 1 minuto en llegar (revisá el spam) 📩");
+    mostrarInfo("Te enviamos un email para restablecer tu clave, puede tardar 1 minuto en llegar (revisá el spam) 📩");
   } catch (error) {
     console.error(error);
-    alert("No se pudo enviar el email. Verificá el correo ingresado.");
+    mostrarError("No se pudo enviar el email. Verificá el correo ingresado.");
   }
 });
 
@@ -379,8 +413,11 @@ configurarHoraMinima();
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  let numeroPedidoCreado = null;
+
+
   if (!auth.currentUser) {
-    alert("Tenés que iniciar sesión para hacer un pedido");
+    mostrarError("Tenés que iniciar sesión para hacer un pedido");
     return;
   }
 
@@ -412,13 +449,13 @@ form.addEventListener("submit", async (e) => {
     ricotaDDL;
 
   if (totalProductos === 0) {
-    alert("Tenés que agregar al menos un producto al pedido 🧺");
+    mostrarInfo("Tenés que agregar al menos un producto al pedido 🧺");
     return;
   }
 
 
   if (!nombre || !telefono || !emailCliente || !fechaEntrega || !horaEntrega) {
-    alert("Completá todos los datos obligatorios");
+    mostrarInfo("Completá todos los datos obligatorios");
     return;
   }
 
@@ -435,6 +472,8 @@ form.addEventListener("submit", async (e) => {
 
       const ultimoNumero = contadorSnap.data().ultimoNumero;
       const nuevoNumero = ultimoNumero + 1;
+      numeroPedidoCreado = nuevoNumero;
+
 
       transaction.update(contadorRef, {
         ultimoNumero: nuevoNumero
@@ -477,12 +516,47 @@ form.addEventListener("submit", async (e) => {
       });
     });
 
-    alert("Pedido enviado correctamente 🎉");
-    form.reset();
+    Swal.fire({
+  icon: "success",
+  title: "Pedido enviado 🎉",
+  text: "¿Qué querés hacer ahora?",
+  showCancelButton: true,
+  // showDenyButton: true,
+  confirmButtonText: "📄 Descargar PDF",
+  cancelButtonText: "🚪 Terminar",
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#9e9e9e"
+}).then((result) => {
+
+  if (result.isConfirmed) {
+    generarPDF({
+      numeroPedido: numeroPedidoCreado,
+      cliente: { nombre, telefono, email: emailCliente },
+      productos: {
+        medialunaBandeja,
+        surtidasBandeja,
+        medialunaGrasa,
+        medialunaManteca,
+        frolaMembrillo,
+        frolaBatata,
+        ricota,
+        ricotaDDL
+      },
+      notas,
+      fechaCreacion: { toDate: () => new Date() },
+      estado: "Pendiente"
+    });
+  }
+
+  if (result.isDismissed) {
+  form.reset();
+  }
+});
+
 
   } catch (error) {
     console.error("Error al guardar pedido:", error);
-    alert("Hubo un error al enviar el pedido");
+    mostrarError("Hubo un error al enviar el pedido");
   }
 });
 
