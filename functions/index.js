@@ -45,34 +45,35 @@ exports.onPedidoCreado = onDocumentCreated(
     console.log("Cliente:", pedido.cliente?.nombre);
 
     const html = `
-      <h2>📦 Nuevo pedido recibido</h2>
+  <h2>📦 PEDIDO: </h2>
 
-      <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
-      <p><strong>Email:</strong> ${pedido.cliente.email}</p>
-      <p><strong>Teléfono:</strong> ${pedido.cliente.telefono}</p>
+  <p><strong>Pedido Nº:</strong> ${String(pedido.numeroPedido).padStart(6, "0")}</p>
 
-      <h3>Productos</h3>
-      <table border="1" cellpadding="6" cellspacing="0">
-        <tr>
-          <th>Manteca</th>
-          <th>Grasa</th>
-          <th>Facturas</th>
-        </tr>
-        <tr>
-          <td>${pedido.productos.manteca}</td>
-          <td>${pedido.productos.grasa}</td>
-          <td>${pedido.productos.facturas}</td>
-        </tr>
-      </table>
+  <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
+  <p><strong>Email:</strong> ${pedido.cliente.email}</p>
+  <p><strong>Teléfono:</strong> ${pedido.cliente.telefono}</p>
 
-      <p><strong>Entrega:</strong> ${pedido.entrega.fecha} ${pedido.entrega.hora}</p>
-      <p><strong>Estado:</strong> ${pedido.estado}</p>
+  <h3>Productos</h3>
+  <ul>
+    <li>Medialuna bandeja: ${pedido.productos.medialunaBandeja}</li>
+    <li>Surtidas bandeja: ${pedido.productos.surtidasBandeja}</li>
+    <li>Medialuna grasa: ${pedido.productos.medialunaGrasa}</li>
+    <li>Medialuna manteca: ${pedido.productos.medialunaManteca}</li>
+    <li>Frola membrillo: ${pedido.productos.frolaMembrillo}</li>
+    <li>Frola batata: ${pedido.productos.frolaBatata}</li>
+    <li>Ricota: ${pedido.productos.ricota}</li>
+    <li>Ricota c/ DDL: ${pedido.productos.ricotaDDL}</li>
+  </ul>
 
-      <br>
-      <a href="https://TU_DOMINIO/admin.html">
-        👉 Ir al panel de administración
-      </a>
-    `;
+  <p><strong>Entrega:</strong> ${pedido.entrega.fecha} ${pedido.entrega.hora}</p>
+  <p><strong>Estado:</strong> ${pedido.estado}</p>
+
+  <br>
+  <a href="https://TU_DOMINIO/admin.html">
+    👉 Ir al panel de administración
+  </a>
+`;
+
 
     try {
       await transporter.sendMail({

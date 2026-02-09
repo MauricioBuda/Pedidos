@@ -436,14 +436,17 @@ function generarPDF(pedido) {
 const logoWidth = 35;
 const logoHeight = 15;
 
+const imgSize = 26; // mismo ancho y alto
+
 doc.addImage(
   logo,
   "PNG",
-  pageWidth - logoWidth - 15,
-  10,
-  logoWidth,
-  logoHeight
+  pageWidth - imgSize - 15,
+  12,
+  imgSize,
+  imgSize
 );
+
 
 
   // =========================
