@@ -69,8 +69,8 @@ exports.onPedidoCreado = onDocumentCreated(
   <p><strong>Estado:</strong> ${pedido.estado}</p>
 
   <br>
-  <a href="https://TU_DOMINIO/admin.html">
-    👉 Ir al panel de administración
+  <a href="https://pedidos-eight-ochre.vercel.app/">
+    👉 Ir a la página
   </a>
 `;
 
