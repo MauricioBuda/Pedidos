@@ -40,7 +40,8 @@ const btnLimpiarFiltroCliente = document.getElementById("btnLimpiarFiltroCliente
 const contadorPedidosNumero = document.getElementById("contadorPedidosNumero");
 
 
-const logo = "/public/img/LogoMedialunas.png";
+const logo = "/img/LogoMedialunas.png";
+
 
 
 

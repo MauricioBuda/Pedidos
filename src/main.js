@@ -22,7 +22,8 @@ import {
 // REFERENCIAS AL DOM
 // ================================
 
-const logo = "/public/img/LogoMedialunas.png";
+const logo = "/img/LogoMedialunas.png";
+
 
 
 async function crearPerfilUsuario(user) {
@@ -590,21 +591,21 @@ btnTogglePass.addEventListener("click", () => {
 
 // FLECHITA
 
-const btnScrollTop = document.getElementById("btnScrollTop");
+// const btnScrollTop = document.getElementById("btnScrollTop");
 
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 200) {
-    btnScrollTop.style.display = "block";
-  } else {
-    btnScrollTop.style.display = "none";
-  }
-});
+// window.addEventListener("scroll", () => {
+//   if (window.scrollY > 200) {
+//     btnScrollTop.style.display = "block";
+//   } else {
+//     btnScrollTop.style.display = "none";
+//   }
+// });
 
-btnScrollTop.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-});
+// btnScrollTop.addEventListener("click", () => {
+//   window.scrollTo({
+//     top: 0,
+//     behavior: "smooth"
+//   });
+// });
 
 
