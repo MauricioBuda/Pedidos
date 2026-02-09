@@ -123,7 +123,7 @@ btnRegister.addEventListener("click", async () => {
   const pass = document.getElementById("loginPass").value.trim();
 
   if (!email || !pass) {
-    mostrarInfo("Completá email y contraseña");
+    mostrarInfo("Completá los campos de email y contraseña, y luego tocá este botón para registrarte");
     return;
   }
 
