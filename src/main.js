@@ -159,6 +159,45 @@ btnResetPass.addEventListener("click", async () => {
 // ESTADO DE SESIÓN
 // ================================
 
+
+
+
+
+function repetirPedido(pedido) {
+  // ===== DATOS CLIENTE =====
+  document.getElementById("nombre").value = pedido.cliente.nombre || "";
+  document.getElementById("telefono").value = pedido.cliente.telefono || "";
+  document.getElementById("email").value = pedido.cliente.email || "";
+
+  // ===== PRODUCTOS =====
+  document.getElementById("medialunaBandeja").value = pedido.productos.medialunaBandeja || 0;
+  document.getElementById("surtidasBandeja").value = pedido.productos.surtidasBandeja || 0;
+  document.getElementById("medialunaGrasa").value = pedido.productos.medialunaGrasa || 0;
+  document.getElementById("medialunaManteca").value = pedido.productos.medialunaManteca || 0;
+  document.getElementById("frolaMembrillo").value = pedido.productos.frolaMembrillo || 0;
+  document.getElementById("frolaBatata").value = pedido.productos.frolaBatata || 0;
+  document.getElementById("ricota").value = pedido.productos.ricota || 0;
+  document.getElementById("ricotaDDL").value = pedido.productos.ricotaDDL || 0;
+
+  // ===== NOTAS =====
+  document.getElementById("notas").value = pedido.notas || "";
+
+  // ❌ NO TOCAR fechaEntrega ni horaEntrega
+
+  // ===== SCROLL AL FORMULARIO =====
+  document.getElementById("pedidoForm").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+
+
+
+
+
+
+
 async function cargarPedidosUsuario(uid) {
   pedidosBody.innerHTML = "";
   loadingPedidos.style.display = "block";
@@ -210,15 +249,22 @@ tr.innerHTML = `
     Ricota c/ DDL: ${pedido.productos.ricotaDDL}
   </td>
   <td>${pedido.notas || "<em>—</em>"}</td>
-  <td>
-    <button class="btnPDF">Descargar PDF</button>
-  </td>
+<td>
+  <button class="btnPDF">Descargar PDF</button>
+  <button class="btnRepetir">Repetir pedido</button>
+</td>
+
 `;
 
 
     tr.querySelector("button").addEventListener("click", () => {
       generarPDF(pedido);
     });
+
+    tr.querySelector(".btnRepetir").addEventListener("click", () => {
+  repetirPedido(pedido);
+    });
+
 
     pedidosBody.appendChild(tr);
   });

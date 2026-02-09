@@ -2,10 +2,12 @@
 
 .h1-pedido {
   margin-bottom: 5vh;
+  color: blue;
 }
 
 .h3-formulario {
   margin-top: 4vh;
+  color: blue;
 }
 
 .formularioCliente {
@@ -66,6 +68,17 @@ min-width: 30vw;
   min-width: 10vw!important;
   margin-top: 1vh;
 }
+
+.btnRepetir {
+  background-color: #e3f2fd;
+  font-weight: bold;
+  width: 90%;
+}
+
+.btnRepetir:hover {
+  background-color: #bbdefb;
+}
+
 
 /* FIN FORMULARIO */
 

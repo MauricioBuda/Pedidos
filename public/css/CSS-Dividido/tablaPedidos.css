@@ -1,5 +1,10 @@
 /* INICIO TABLA */
 
+.h2-misPedidos {
+  color: blue;
+  margin-bottom: 2vh;
+}
+
 th {
   padding: 30px;
 }
