@@ -22,6 +22,9 @@ import {
 // REFERENCIAS AL DOM
 // ================================
 
+const logo = "/public/img/LogoMedialunas.png";
+
+
 async function crearPerfilUsuario(user) {
   const ref = doc(db, "usuarios", user.uid);
   const snap = await getDoc(ref);
@@ -426,7 +429,21 @@ form.addEventListener("submit", async (e) => {
 function generarPDF(pedido) {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
-  let y = 20;
+  let y = 25;
+
+
+const logoWidth = 35;
+const logoHeight = 15;
+
+doc.addImage(
+  logo,
+  "PNG",
+  pageWidth - logoWidth - 15,
+  10,
+  logoWidth,
+  logoHeight
+);
+
 
   // =========================
   // TÍTULO

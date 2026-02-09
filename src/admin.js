@@ -16,6 +16,7 @@ import {
 
 import jsPDF from "jspdf";
 
+
 // ================================
 // ESTADO
 // ================================
@@ -37,6 +38,11 @@ const filtroClienteTexto = document.getElementById("filtroClienteTexto");
 const btnLimpiarFiltroCliente = document.getElementById("btnLimpiarFiltroCliente");
 
 const contadorPedidosNumero = document.getElementById("contadorPedidosNumero");
+
+
+const logo = "/public/img/LogoMedialunas.png";
+
+
 
 // ================================
 // EVENTOS (UNA SOLA VEZ)
@@ -299,7 +305,21 @@ function mostrarSugerencias(sugerencias, texto) {
 function generarPDF(pedido) {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
-  let y = 20;
+  let y = 25;
+
+
+const logoWidth = 35;
+const logoHeight = 15;
+
+doc.addImage(
+  logo,
+  "PNG",
+  pageWidth - logoWidth - 15,
+  10,
+  logoWidth,
+  logoHeight
+);
+
 
   // =========================
   // TÍTULO
