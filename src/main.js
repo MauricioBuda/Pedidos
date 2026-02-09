@@ -4,7 +4,7 @@
 
 import jsPDF from "jspdf";
 import { query, where, getDocs, collection } from "firebase/firestore";
-import { doc, getDoc, setDoc, runTransaction } from "firebase/firestore";
+import { doc, getDoc, setDoc, runTransaction, orderBy } from "firebase/firestore";
 import { auth, googleProvider, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -202,10 +202,12 @@ async function cargarPedidosUsuario(uid) {
   pedidosBody.innerHTML = "";
   loadingPedidos.style.display = "block";
 
-  const q = query(
-    collection(db, "pedidos"),
-    where("uid", "==", uid)
-  );
+const q = query(
+  collection(db, "pedidos"),
+  where("uid", "==", uid),
+  orderBy("fechaCreacion", "desc")
+);
+
 
   const snapshot = await getDocs(q);
 
@@ -500,7 +502,7 @@ doc.addImage(
   // =========================
   doc.setFontSize(16);
   doc.setTextColor(0);
-  doc.text("Pedido recibido", pageWidth / 2, y, { align: "center" });
+  doc.text("Pedido realizado", pageWidth / 2, y, { align: "center" });
 
   y += 6;
   doc.setFontSize(11);
