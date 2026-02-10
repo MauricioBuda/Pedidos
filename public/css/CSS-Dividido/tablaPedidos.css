@@ -80,6 +80,12 @@ td button:hover {
   height: 25px;
 }
 
+.btnRepetir {
+  background-color: #e3f2fd;
+  font-weight: bold;
+  width: 90%;
+}
+
 /* FIN TABLA */
 
 

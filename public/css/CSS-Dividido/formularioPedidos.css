@@ -25,7 +25,7 @@ min-width: 30vw;
 }
 
 .btnEnviarPedido{
-  max-width: 12vw;
+  max-width: 15vw;
   margin: 5vh 0 12vh 0;
   padding: 12px;
   background-color: rgba(0, 128, 0, 0.867);
@@ -69,15 +69,29 @@ min-width: 30vw;
   margin-top: 1vh;
 }
 
-.btnRepetir {
-  background-color: #e3f2fd;
-  font-weight: bold;
-  width: 90%;
-}
+
 
 .btnRepetir:hover {
   background-color: #bbdefb;
 }
+
+.btnVaciarFormulario {
+  font-size: 1vw;
+  background: #f3f3f3;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+
+.btnVaciarFormulario:hover {
+  background: #e6e6e6;
+}
+
 
 
 /* FIN FORMULARIO */
@@ -127,5 +141,9 @@ min-width: 30vw;
       max-width: none;
       font-size: 1.2rem;
     }
+
+.btnVaciarFormulario {
+  font-size: 1.2rem;
+}
 }
 

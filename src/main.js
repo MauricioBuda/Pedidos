@@ -128,6 +128,24 @@ const seccionAdmin = document.getElementById("seccionAdmin");
 
 const authSection = document.getElementById("authSection");
 
+const btnVaciarFormulario = document.getElementById("btnVaciarFormulario");
+
+btnVaciarFormulario.addEventListener("click", () => {
+  Swal.fire({
+    title: "¿Vaciar formulario?",
+    text: "Se perderán los datos ingresados",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, vaciar",
+    cancelButtonText: "Cancelar"
+  }).then(result => {
+    if (result.isConfirmed) {
+      form.reset();
+    }
+  });
+});
+
+
 
 
 // ================================
@@ -443,6 +461,7 @@ configurarHoraMinima();
 // ================================
 // ENVÍO DE PEDIDO
 // ================================
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
