@@ -18,11 +18,29 @@
   position: absolute;
   right: 5%;
   top: 3%;
-  color: white;
-  background-color: white;
   padding: 0px!important;
   border: none;
 }
+
+.btnLogout {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.btnLogout img {
+  transition: filter 0.25s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .btnLogout:hover img {
+    filter: drop-shadow(0 0 6px rgba(220, 53, 69, 0.6));
+    transform: scale(1.05);
+  }
+}
+
+
 
 .imgLogout {
   width: 2.5vw;

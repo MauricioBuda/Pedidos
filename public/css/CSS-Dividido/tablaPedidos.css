@@ -14,6 +14,10 @@ td {
   padding: 10px
 }
 
+td button:hover {
+  background-color: rgba(142, 142, 142, 0.591);
+}
+
 .btnPDF {
   background-color: white;
   padding: 5px;
@@ -22,7 +26,7 @@ td {
 }
 
 .btnPDF:hover {
-  background-color: rgba(222, 222, 222, 0.683);
+  background-color: rgba(142, 142, 142, 0.591);
 }
 
 

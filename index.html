@@ -16,10 +16,37 @@
   <link rel="stylesheet" href="/public/css/styles.css">
   <title> Club De Las Medialunas [pedidos] </title>
 </head>
+
+
+
+
 <body>
 
 
-<section id="primer-section" class="primer-section">
+
+  <!-- LOADING -->
+
+<div id="loadingApp" class="loading-app">
+  <img
+    src="./public/img/LogoMedialunas.png"
+    alt="Club de las Medialunas"
+    class="loading-logo"
+  />
+  <!-- <div class="spinner"></div> -->
+  <p> Preparando las medialunas ... </p>
+</div>
+
+
+
+<!-- ENVUELVO TODO POR EL LOADING ↓ -->
+
+
+<div id="appContent" style="display:none;">
+
+
+
+
+<section id="primer-section"  class="primer-section">
 
 
 <img class="imgMedialunas" id="imgMedialunas" src="./public/img/LogoMedialunas.png" alt="Medialunas">
@@ -311,6 +338,14 @@
     height="26"
   />
 </a>
+
+
+
+
+</div>
+
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

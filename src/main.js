@@ -48,6 +48,19 @@ function mostrarInfo(mensaje) {
   });
 }
 
+function mostrarLoadingPedido() {
+  Swal.fire({
+    title: "Preparando tu pedido 🧺",
+    text: "Por favor esperá un momento",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+}
+
+
 
 
 
@@ -76,6 +89,8 @@ async function crearPerfilUsuario(user) {
   }
 }
 
+const loadingApp = document.getElementById("loadingApp");
+const appContent = document.getElementById("appContent");
 
 
 const pedidosBody = document.getElementById("pedidosBody");
@@ -314,6 +329,11 @@ tr.innerHTML = `
 
 
 onAuthStateChanged(auth, async (user) => {
+
+  // 🔒 Todavía no mostramos nada
+  loadingApp.style.display = "flex";
+  appContent.style.display = "none";
+
   if (!user) {
     authSection.style.display = "flex";
     imgMedialunas.style.display = "flex";
@@ -324,10 +344,16 @@ onAuthStateChanged(auth, async (user) => {
     hrMobileUser.style.display = "none";
 
     primerSection.style.flexDirection = "column";
+
+    // ✅ MOSTRAR TODO JUNTO
+    loadingApp.style.display = "none";
+    appContent.style.display = "block";
     return;
   }
 
-  // Usuario autenticado
+  // =========================
+  // USUARIO AUTENTICADO
+  // =========================
   authSection.style.display = "none";
   h2ingresar.style.display = "none";
   imgMedialunas.style.display = "none";
@@ -348,16 +374,23 @@ onAuthStateChanged(auth, async (user) => {
     seccionCliente.style.display = "none";
 
     if (window.initAdminPanel) {
-      window.initAdminPanel();
+      await window.initAdminPanel();
     }
+
+    loadingApp.style.display = "none";
+    appContent.style.display = "block";
     return;
   }
 
-  // Cliente
+  // CLIENTE
   seccionCliente.style.display = "flex";
   seccionAdmin.style.display = "none";
   await cargarPedidosUsuario(user.uid);
+
+  loadingApp.style.display = "none";
+  appContent.style.display = "block";
 });
+
 
 
 
@@ -412,6 +445,9 @@ configurarHoraMinima();
 // ================================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+    mostrarLoadingPedido();
+
 
   let numeroPedidoCreado = null;
 
